@@ -6,9 +6,9 @@ import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.client.indices.GetIndexRequest;
-import org.elasticsearch.client.indices.GetIndexResponse;
+import org.elasticsearch.index.query.MatchAllQueryBuilder;
 import org.elasticsearch.index.query.MatchQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
@@ -27,42 +27,19 @@ public class ElasticService {
     private RestHighLevelClient restHighLevelClient;
 
     public List<ExchangeDTO> getAll() throws IOException {
-        SearchRequest searchRequest = new SearchRequest("exchanges");
-        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.query(QueryBuilders.matchAllQuery());
-        searchRequest.source(searchSourceBuilder);
+        MatchAllQueryBuilder matchAllQueryBuilder = QueryBuilders.matchAllQuery();
 
-        SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
-        SearchHits hits = searchResponse.getHits();
-
-        List<ExchangeDTO> exchangeDTOList = new ArrayList<>();
-
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        SearchHit[] searchHits = hits.getHits();
-        for (SearchHit hit : searchHits) {
-            String sourceAsString = hit.getSourceAsString();
-            ExchangeDTO exchangeDTO = objectMapper.readValue(sourceAsString, ExchangeDTO.class);
-            exchangeDTOList.add(exchangeDTO);
-        }
-
-        return exchangeDTOList;
-
-//        SearchRequest searchRequest = new SearchRequest("exchanges");
-//
-//        MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("email", "shining.melon2015@gmail.com");
-//        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-//        sourceBuilder.query(matchQueryBuilder);
-//
-//        searchRequest.source(sourceBuilder);
-//
-//        SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+        return executeQuery(matchAllQueryBuilder);
     }
 
-    public List<ExchangeDTO> getSuccessfulExchanges() throws IOException {
-        SearchRequest searchRequest = new SearchRequest("exchanges");
+    public List<ExchangeDTO> getExchangesReport(boolean success) throws IOException {
+        MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("success", String.valueOf(success));
 
-        MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("success", "true");
+        return executeQuery(matchQueryBuilder);
+    }
+
+    private <T extends QueryBuilder> List<ExchangeDTO> executeQuery(T matchQueryBuilder) throws IOException {
+        SearchRequest searchRequest = new SearchRequest("exchanges");
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
         sourceBuilder.query(matchQueryBuilder);
 
@@ -71,7 +48,7 @@ public class ElasticService {
         SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
         SearchHits hits = searchResponse.getHits();
 
-        List<ExchangeDTO> exchangeDTOList = new ArrayList<>();
+        List<ExchangeDTO> exchanges = new ArrayList<>();
 
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -79,35 +56,9 @@ public class ElasticService {
         for (SearchHit hit : searchHits) {
             String sourceAsString = hit.getSourceAsString();
             ExchangeDTO exchangeDTO = objectMapper.readValue(sourceAsString, ExchangeDTO.class);
-            exchangeDTOList.add(exchangeDTO);
+            exchanges.add(exchangeDTO);
         }
 
-        return exchangeDTOList;
-    }
-
-    public List<ExchangeDTO> getUnsuccessfulExchanges() throws IOException {
-        SearchRequest searchRequest = new SearchRequest("exchanges");
-
-        MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("success", "false");
-        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-        sourceBuilder.query(matchQueryBuilder);
-
-        searchRequest.source(sourceBuilder);
-
-        SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
-        SearchHits hits = searchResponse.getHits();
-
-        List<ExchangeDTO> exchangeDTOList = new ArrayList<>();
-
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        SearchHit[] searchHits = hits.getHits();
-        for (SearchHit hit : searchHits) {
-            String sourceAsString = hit.getSourceAsString();
-            ExchangeDTO exchangeDTO = objectMapper.readValue(sourceAsString, ExchangeDTO.class);
-            exchangeDTOList.add(exchangeDTO);
-        }
-
-        return exchangeDTOList;
+        return exchanges;
     }
 }

@@ -31,7 +31,9 @@ public class ConsumerService {
             simpleMailMessage.setFrom(fromEmail);
             simpleMailMessage.setTo(exchangeDTO.getEmail());
             simpleMailMessage.setSubject("Exchange information");
-            simpleMailMessage.setText(String.format("Your exchanged was successful!\nYou exchange %.2f %s to %.2f %s.", exchangeDTO.getSold(), exchangeDTO.getSoldCurrency(), exchangeDTO.getBought(), exchangeDTO.getBoughtCurrency()));
+            simpleMailMessage.setText(String.format("Your exchanged was successful!\nYou exchange %.2f %s to %.2f %s.",
+                    exchangeDTO.getSold(), exchangeDTO.getSoldCurrency(),
+                    exchangeDTO.getBought(), exchangeDTO.getBoughtCurrency()));
 
             mailSender.send(simpleMailMessage);
         }

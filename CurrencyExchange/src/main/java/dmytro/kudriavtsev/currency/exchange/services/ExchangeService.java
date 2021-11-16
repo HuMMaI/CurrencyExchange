@@ -11,11 +11,9 @@ import dmytro.kudriavtsev.currency.exchange.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ExchangeService {
@@ -32,10 +30,14 @@ public class ExchangeService {
         Wallet walletWithSoldCurrency = user.getWallet().stream()
                 .filter(s -> s.getCurrency().equals(exchangeDTO.getSoldCurrency()))
                 .findFirst()
-                .orElseThrow(() -> new ExchangeException(HttpStatus.NOT_FOUND, String.format("User %s has not got wallet for this currency: %s", user.getEmail(), exchangeDTO.getSoldCurrency()), exchangeDTO));
+                .orElseThrow(() -> new ExchangeException(HttpStatus.NOT_FOUND,
+                        String.format("User %s has not got wallet for this currency: %s",
+                                user.getEmail(), exchangeDTO.getSoldCurrency()), exchangeDTO));
 
         if (exchangeDTO.getSold() > walletWithSoldCurrency.getSum()) {
-            throw new ExchangeException(HttpStatus.BAD_REQUEST, String.format("User %s does not have enough money: %.2f", user.getEmail(), walletWithSoldCurrency.getSum()), exchangeDTO);
+            throw new ExchangeException(HttpStatus.BAD_REQUEST,
+                    String.format("User %s does not have enough money: %.2f",
+                            user.getEmail(), walletWithSoldCurrency.getSum()), exchangeDTO);
         }
 
         Wallet walletWithBoughtCurrency = user.getWallet().stream()

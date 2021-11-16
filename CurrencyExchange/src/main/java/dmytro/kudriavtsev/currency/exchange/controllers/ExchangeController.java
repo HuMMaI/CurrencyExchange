@@ -28,9 +28,7 @@ public class ExchangeController {
     public ResponseEntity<Void> exchange(@RequestBody ExchangeDTO exchangeDTO) {
         User user = userService.readByEmail(exchangeDTO.getEmail());
 
-        ExchangeRate exchangeRate = exchangeRateService.findActualExchangeRates().stream()
-                .filter(s -> s.getCurrency().equals(exchangeDTO.getBoughtCurrency())).findFirst()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Actual exchange rate does not found: %s", exchangeDTO.getBoughtCurrency())));
+        ExchangeRate exchangeRate = exchangeRateService.findActualExchangeRate(exchangeDTO.getBoughtCurrency());
 
         exchangeService.exchange(user, exchangeRate, exchangeDTO);
 

@@ -26,7 +26,7 @@ public class KafkaConfig {
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
 
-        return new DefaultKafkaConsumerFactory<String, ExchangeDTO>(config, new StringDeserializer(), new JsonDeserializer<>(ExchangeDTO.class));
+        return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(), new JsonDeserializer<>(ExchangeDTO.class));
     }
 
     @Bean
