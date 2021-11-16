@@ -1,6 +1,7 @@
 package dmytro.kudriavtsev.currency.exchange.entities;
 
 import javax.persistence.*;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "exchange_rates")
@@ -15,13 +16,17 @@ public class ExchangeRate {
 
     private Double purchase;
 
+    @Column(name = "post_time")
+    private ZonedDateTime postTime;
+
     public ExchangeRate() {
     }
 
-    public ExchangeRate(String currency, Double sale, Double purchase) {
+    public ExchangeRate(String currency, Double sale, Double purchase, ZonedDateTime postTime) {
         this.currency = currency;
         this.sale = sale;
         this.purchase = purchase;
+        this.postTime = postTime;
     }
 
     public Long getId() {
@@ -54,5 +59,13 @@ public class ExchangeRate {
 
     public void setPurchase(Double purchase) {
         this.purchase = purchase;
+    }
+
+    public ZonedDateTime getPostTime() {
+        return postTime;
+    }
+
+    public void setPostTime(ZonedDateTime postTime) {
+        this.postTime = postTime;
     }
 }

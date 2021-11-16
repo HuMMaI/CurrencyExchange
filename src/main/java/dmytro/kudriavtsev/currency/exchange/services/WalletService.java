@@ -33,4 +33,8 @@ public class WalletService {
     public void delete(Long id) {
         walletRepository.deleteById(id);
     }
+
+    public void updateAll(List<Wallet> wallets) {
+        walletRepository.saveAll(wallets);
+    }
 }
