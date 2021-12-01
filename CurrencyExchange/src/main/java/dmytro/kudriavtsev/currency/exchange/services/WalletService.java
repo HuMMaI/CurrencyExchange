@@ -1,10 +1,12 @@
 package dmytro.kudriavtsev.currency.exchange.services;
 
+import dmytro.kudriavtsev.currency.exchange.dtos.WalletDTO;
 import dmytro.kudriavtsev.currency.exchange.entities.Wallet;
 import dmytro.kudriavtsev.currency.exchange.repos.WalletRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class WalletService {
@@ -36,5 +38,13 @@ public class WalletService {
 
     public void updateAll(List<Wallet> wallets) {
         walletRepository.saveAll(wallets);
+    }
+
+    public List<WalletDTO> readByUser(String email) {
+        List<Wallet> wallets = walletRepository.findAllByEmail(email);
+
+        return wallets.stream()
+                .map(WalletDTO::new)
+                .collect(Collectors.toList());
     }
 }

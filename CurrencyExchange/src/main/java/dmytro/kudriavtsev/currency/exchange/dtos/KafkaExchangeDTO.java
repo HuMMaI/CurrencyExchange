@@ -2,10 +2,11 @@ package dmytro.kudriavtsev.currency.exchange.dtos;
 
 public class KafkaExchangeDTO {
     private String email;
-    private Double bought;
-    private String boughtCurrency;
-    private Double sold;
-    private String soldCurrency;
+    private ExchangeEvent event;
+    private Currency firstCurrency;
+    private double firstSum;
+    private Currency secondCurrency;
+    private double secondSum;
     private boolean success;
 
     public KafkaExchangeDTO() {
@@ -13,18 +14,20 @@ public class KafkaExchangeDTO {
 
     public KafkaExchangeDTO(ExchangeDTO exchangeDTO, boolean success) {
         this.email = exchangeDTO.getEmail();
-        this.boughtCurrency = exchangeDTO.getBoughtCurrency();
-        this.sold = exchangeDTO.getSold();
-        this.soldCurrency = exchangeDTO.getSoldCurrency();
+        this.event = exchangeDTO.getEvent();
+        this.firstCurrency = exchangeDTO.getFirstCurrency();
+        this.firstSum = exchangeDTO.getSum();
+        this.secondCurrency = exchangeDTO.getSecondCurrency();
         this.success = success;
     }
 
-    public KafkaExchangeDTO(ExchangeDTO exchangeDTO, double boughtSum, boolean success) {
+    public KafkaExchangeDTO(ExchangeDTO exchangeDTO, double secondSum, boolean success) {
         this.email = exchangeDTO.getEmail();
-        this.bought = boughtSum;
-        this.boughtCurrency = exchangeDTO.getBoughtCurrency();
-        this.sold = exchangeDTO.getSold();
-        this.soldCurrency = exchangeDTO.getSoldCurrency();
+        this.event = exchangeDTO.getEvent();
+        this.firstCurrency = exchangeDTO.getFirstCurrency();
+        this.firstSum = exchangeDTO.getSum();
+        this.secondCurrency = exchangeDTO.getSecondCurrency();
+        this.secondSum = secondSum;
         this.success = success;
     }
 
@@ -36,36 +39,44 @@ public class KafkaExchangeDTO {
         this.email = email;
     }
 
-    public Double getBought() {
-        return bought;
+    public ExchangeEvent getEvent() {
+        return event;
     }
 
-    public void setBought(Double bought) {
-        this.bought = bought;
+    public void setEvent(ExchangeEvent event) {
+        this.event = event;
     }
 
-    public String getBoughtCurrency() {
-        return boughtCurrency;
+    public Currency getFirstCurrency() {
+        return firstCurrency;
     }
 
-    public void setBoughtCurrency(String boughtCurrency) {
-        this.boughtCurrency = boughtCurrency;
+    public void setFirstCurrency(Currency firstCurrency) {
+        this.firstCurrency = firstCurrency;
     }
 
-    public Double getSold() {
-        return sold;
+    public double getFirstSum() {
+        return firstSum;
     }
 
-    public void setSold(Double sold) {
-        this.sold = sold;
+    public void setFirstSum(double firstSum) {
+        this.firstSum = firstSum;
     }
 
-    public String getSoldCurrency() {
-        return soldCurrency;
+    public Currency getSecondCurrency() {
+        return secondCurrency;
     }
 
-    public void setSoldCurrency(String soldCurrency) {
-        this.soldCurrency = soldCurrency;
+    public void setSecondCurrency(Currency secondCurrency) {
+        this.secondCurrency = secondCurrency;
+    }
+
+    public double getSecondSum() {
+        return secondSum;
+    }
+
+    public void setSecondSum(double secondSum) {
+        this.secondSum = secondSum;
     }
 
     public boolean isSuccess() {
