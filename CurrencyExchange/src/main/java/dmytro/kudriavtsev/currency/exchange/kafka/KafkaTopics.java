@@ -2,9 +2,10 @@ package dmytro.kudriavtsev.currency.exchange.kafka;
 
 public enum KafkaTopics {
     REPORTS("reports"),
-    MAIL("mail");
+    MAIL("mail"),
+    ACTIVATION_MAIL("activation");
 
-    private String topicName;
+    private final String topicName;
 
     KafkaTopics(String topicName) {
         this.topicName = topicName;

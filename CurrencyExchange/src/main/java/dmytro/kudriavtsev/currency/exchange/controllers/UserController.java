@@ -1,5 +1,7 @@
 package dmytro.kudriavtsev.currency.exchange.controllers;
 
+import dmytro.kudriavtsev.currency.exchange.dtos.UserActivationDTO;
+import dmytro.kudriavtsev.currency.exchange.dtos.UserDTO;
 import dmytro.kudriavtsev.currency.exchange.entities.User;
 import dmytro.kudriavtsev.currency.exchange.services.UserService;
 import org.springframework.http.HttpStatus;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/api/user")
 public class UserController {
     private final UserService userService;
@@ -32,15 +35,33 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User newUser = userService.create(user);
+    public ResponseEntity<User> createUser(@RequestBody UserDTO userDTO) {
+        User newUser = userService.create(userDTO);
 
         return new ResponseEntity<>(newUser, HttpStatus.OK);
     }
 
+    @PostMapping("/activate/{email}")
+    public ResponseEntity<Void> sendActivationMail(@PathVariable String email) {
+        userService.createActivationCode(email);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/validate")
+    public ResponseEntity<Void> validateEmail(@RequestBody UserActivationDTO userActivationDTO) {
+        boolean isActivate = userService.activateUser(userActivationDTO);
+
+        if (isActivate) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+    }
+
     @PutMapping
-    public ResponseEntity<User> updateUser(@RequestBody User user) {
-        User updatedUser = userService.update(user);
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO) {
+        UserDTO updatedUser = userService.update(userDTO);
 
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }

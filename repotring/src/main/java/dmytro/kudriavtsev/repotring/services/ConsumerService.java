@@ -1,7 +1,8 @@
 package dmytro.kudriavtsev.repotring.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import dmytro.kudriavtsev.repotring.dtos.MessageDTO;
 import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.xcontent.XContentType;
@@ -20,11 +21,12 @@ public class ConsumerService {
 
     @KafkaListener(topics = "reports", groupId = "group_id")
     public void consume(@Payload String message) throws IOException {
+        MessageDTO messageDTO = new ObjectMapper().readValue(message, MessageDTO.class);
         IndexRequest request = new IndexRequest("exchanges");
         request.id(UUID.randomUUID().toString());
-        request.source(message, XContentType.JSON);
+        request.source(new ObjectMapper().writeValueAsString(messageDTO.getData()), XContentType.JSON);
 
-        IndexResponse indexResponse = restHighLevelClient.index(request, RequestOptions.DEFAULT);
+        restHighLevelClient.index(request, RequestOptions.DEFAULT);
     }
 
 }

@@ -1,9 +1,12 @@
 package dmytro.kudriavtsev.sender.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dmytro.kudriavtsev.sender.dtos.ActivationMailDTO;
 import dmytro.kudriavtsev.sender.dtos.ExchangeDTO;
+import dmytro.kudriavtsev.sender.dtos.MessageDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -21,22 +24,39 @@ public class ConsumerService {
     private String fromEmail;
 
     @KafkaListener(topics = "mail", groupId = "group_id")
-    public void consume(@Payload String message) throws JsonProcessingException {
+    public void consumeMail(@Payload String message) throws JsonProcessingException {
         JsonNode jsonNode = new ObjectMapper().readTree(message);
-        ExchangeDTO exchangeDTO = new ObjectMapper().treeToValue(jsonNode, ExchangeDTO.class);
+        MessageDTO<ExchangeDTO> messageDTO = new ObjectMapper().convertValue(jsonNode.findValue("data"), new TypeReference<>() {});
+        ExchangeDTO exchangeDTO = messageDTO.getData();
 
-        if (exchangeDTO.isSuccess()) {
-            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-
-            simpleMailMessage.setFrom(fromEmail);
-            simpleMailMessage.setTo(exchangeDTO.getEmail());
-            simpleMailMessage.setSubject("Exchange information");
-            simpleMailMessage.setText(String.format("Your exchanged was successful!\nYou exchange %.2f %s to %.2f %s.",
-                    exchangeDTO.getSold(), exchangeDTO.getSoldCurrency(),
-                    exchangeDTO.getBought(), exchangeDTO.getBoughtCurrency()));
-
-            mailSender.send(simpleMailMessage);
-        }
+        sendMail(exchangeDTO.getEmail(), "Exchange information",
+                String.format("Your exchanged was successful!\nYou exchange %.2f %s to %.2f %s.",
+                        exchangeDTO.getSold(),
+                        exchangeDTO.getSoldCurrency(),
+                        exchangeDTO.getBought(),
+                        exchangeDTO.getBoughtCurrency()));
     }
 
+    @KafkaListener(topics = "activation", groupId = "group_id")
+    public void consumeActivationMail(@Payload String message) throws JsonProcessingException {
+        JsonNode jsonNode = new ObjectMapper().readTree(message);
+        MessageDTO<ActivationMailDTO> messageDTO = new ObjectMapper().convertValue(jsonNode.findValue("data"), new TypeReference<>() {});
+
+        System.out.println("[Activation code: " + messageDTO.getData().getActivationCode() + "]");
+
+        sendMail(messageDTO.getData().getEmail(), "Activation",
+                String.format("You need to activate your email to using exchange service.\nActivation code: %s",
+                        messageDTO.getData().getActivationCode()));
+    }
+
+    private void sendMail(String to, String subject, String text) {
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+
+        simpleMailMessage.setFrom(fromEmail);
+        simpleMailMessage.setTo(to);
+        simpleMailMessage.setSubject(subject);
+        simpleMailMessage.setText(text);
+
+        mailSender.send(simpleMailMessage);
+    }
 }

@@ -1,6 +1,6 @@
 package dmytro.kudriavtsev.currency.exchange.kafka;
 
-import dmytro.kudriavtsev.currency.exchange.dtos.KafkaExchangeDTO;
+import dmytro.kudriavtsev.currency.exchange.dtos.MessageDTO;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +17,7 @@ import java.util.Map;
 public class KafkaConfig {
 
     @Bean
-    public ProducerFactory<String, KafkaExchangeDTO> producerFactory() {
+    public ProducerFactory<String, MessageDTO<?>> producerFactory() {
         Map<String, Object> config = new HashMap<>();
 
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
@@ -28,7 +28,7 @@ public class KafkaConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, KafkaExchangeDTO> kafkaTemplate() {
+    public KafkaTemplate<String, MessageDTO<?>> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 }

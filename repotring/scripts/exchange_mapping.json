@@ -1,0 +1,27 @@
+{
+  "mappings": {
+    "properties": {
+      "email": {
+        "type": "text"
+      },
+      "event": {
+        "type": "text"
+      },
+      "firstCurrency": {
+        "type": "text"
+      },
+      "firstSum": {
+        "type": "double"
+      },
+      "secondCurrency": {
+        "type": "text"
+      },
+      "secondSum": {
+        "type": "double"
+      },
+      "success": {
+        "type": "boolean"
+      }
+    }
+  }
+}

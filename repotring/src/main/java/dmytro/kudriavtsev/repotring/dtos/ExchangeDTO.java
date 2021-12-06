@@ -2,10 +2,11 @@ package dmytro.kudriavtsev.repotring.dtos;
 
 public class ExchangeDTO {
     private String email;
-    private Double bought;
-    private String boughtCurrency;
-    private Double sold;
-    private String soldCurrency;
+    private String event;
+    private String firstCurrency;
+    private double firstSum;
+    private String secondCurrency;
+    private double secondSum;
     private boolean success;
 
     public String getEmail() {
@@ -16,36 +17,44 @@ public class ExchangeDTO {
         this.email = email;
     }
 
-    public Double getBought() {
-        return bought;
+    public String getEvent() {
+        return event;
     }
 
-    public void setBought(Double bought) {
-        this.bought = bought;
+    public void setEvent(String event) {
+        this.event = event;
     }
 
-    public String getBoughtCurrency() {
-        return boughtCurrency;
+    public String getFirstCurrency() {
+        return firstCurrency;
     }
 
-    public void setBoughtCurrency(String boughtCurrency) {
-        this.boughtCurrency = boughtCurrency;
+    public void setFirstCurrency(String firstCurrency) {
+        this.firstCurrency = firstCurrency;
     }
 
-    public Double getSold() {
-        return sold;
+    public double getFirstSum() {
+        return firstSum;
     }
 
-    public void setSold(Double sold) {
-        this.sold = sold;
+    public void setFirstSum(double firstSum) {
+        this.firstSum = firstSum;
     }
 
-    public String getSoldCurrency() {
-        return soldCurrency;
+    public String getSecondCurrency() {
+        return secondCurrency;
     }
 
-    public void setSoldCurrency(String soldCurrency) {
-        this.soldCurrency = soldCurrency;
+    public void setSecondCurrency(String secondCurrency) {
+        this.secondCurrency = secondCurrency;
+    }
+
+    public double getSecondSum() {
+        return secondSum;
+    }
+
+    public void setSecondSum(double secondSum) {
+        this.secondSum = secondSum;
     }
 
     public boolean isSuccess() {

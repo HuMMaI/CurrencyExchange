@@ -1,5 +1,7 @@
 package dmytro.kudriavtsev.currency.exchange.entities;
 
+import dmytro.kudriavtsev.currency.exchange.dtos.UserDTO;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -16,6 +18,9 @@ public class User {
 
     private String email;
 
+    @Column(name = "activation_code")
+    private String activationCode;
+
     @OneToMany
     @JoinTable(name = "user_wallets", joinColumns = {
             @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -25,6 +30,16 @@ public class User {
     private List<Wallet> wallet;
 
     public User() {
+    }
+
+    public User(String email) {
+        this.email = email;
+    }
+
+    public User(UserDTO userDTO) {
+        this.email = userDTO.getEmail();
+        this.name = userDTO.getName();
+        this.surname = userDTO.getSurname();
     }
 
     public User(String name, String surname, String email, List<Wallet> wallet) {
@@ -64,5 +79,13 @@ public class User {
 
     public void setWallet(List<Wallet> wallet) {
         this.wallet = wallet;
+    }
+
+    public String getActivationCode() {
+        return activationCode;
+    }
+
+    public void setActivationCode(String activationCode) {
+        this.activationCode = activationCode;
     }
 }

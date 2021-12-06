@@ -1,6 +1,7 @@
 package dmytro.kudriavtsev.sender.kafka;
 
-import dmytro.kudriavtsev.sender.dtos.ExchangeDTO;
+import com.fasterxml.jackson.core.type.TypeReference;
+import dmytro.kudriavtsev.sender.dtos.MessageDTO;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +19,7 @@ import java.util.Map;
 @Configuration
 public class KafkaConfig {
     @Bean
-    public ConsumerFactory<String, ExchangeDTO> consumerFactory() {
+    public ConsumerFactory<String, MessageDTO<?>> consumerFactory() {
         Map<String, Object> config = new HashMap<>();
 
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
@@ -26,12 +27,12 @@ public class KafkaConfig {
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
 
-        return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(), new JsonDeserializer<>(ExchangeDTO.class));
+        return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(), new JsonDeserializer<>(new TypeReference<>() {}));
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, ExchangeDTO> kafkaListenerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, ExchangeDTO> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    public ConcurrentKafkaListenerContainerFactory<String, MessageDTO<?>> kafkaListenerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, MessageDTO<?>> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         return factory;
     }
