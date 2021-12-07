@@ -27,11 +27,11 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getById(@PathVariable("id") Long id) {
-        User user = userService.readById(id);
+    @GetMapping("/{email}")
+    public ResponseEntity<UserDTO> getByEmail(@PathVariable("email") String email) {
+        UserDTO userDTO = new UserDTO(userService.readByEmail(email));
 
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
     @PostMapping
@@ -42,10 +42,10 @@ public class UserController {
     }
 
     @PostMapping("/activate/{email}")
-    public ResponseEntity<Void> sendActivationMail(@PathVariable String email) {
-        userService.createActivationCode(email);
+    public ResponseEntity<Boolean> sendActivationMail(@PathVariable String email) {
+        boolean isUserPresent = userService.createActivationCode(email);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(isUserPresent, HttpStatus.OK);
     }
 
     @PostMapping("/validate")

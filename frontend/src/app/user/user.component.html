@@ -1,0 +1,39 @@
+<div class="email-form-container">
+  <mat-card class="email-form-container__card">
+    <mat-card-header class="email-from-header">
+      <mat-card-title>Enter your email</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="form-container" [formGroup]="emailForm">
+        <mat-form-field class="form-container__form-field" appearance="fill">
+          <mat-label>Email</mat-label>
+          <input matInput placeholder="shining.melon2015@gmail.com" formControlName="email" [readonly]="isCodeSent || isActivate">
+        </mat-form-field>
+
+        <mat-form-field *ngIf="isCodeSent" class="form-container__form-field" appearance="fill">
+          <mat-label>Code</mat-label>
+          <input matInput placeholder="412359" formControlName="code">
+        </mat-form-field>
+
+        <mat-form-field *ngIf="isActivate && !isUserPresent" class="form-container__form-field" appearance="fill">
+          <mat-label>Name</mat-label>
+          <input matInput placeholder="412359" formControlName="name">
+        </mat-form-field>
+
+        <mat-form-field *ngIf="isActivate && !isUserPresent" class="form-container__form-field" appearance="fill">
+          <mat-label>Surname</mat-label>
+          <input matInput placeholder="412359" formControlName="surname">
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" *ngIf="!isCodeSent && !isActivate" [disabled]="this.emailForm.controls['email'].invalid" (click)="send()">Send code</button>
+        <button mat-raised-button color="primary" *ngIf="isCodeSent" [disabled]="this.emailForm.controls['code'].invalid" (click)="activate()">Activate</button>
+        <button mat-raised-button color="primary" *ngIf="isActivate && !isUserPresent" [disabled]="this.emailForm.invalid" (click)="start()">Start</button>
+        <div class="form-container__actions" *ngIf="isCodeSent">
+          <button mat-raised-button color="primary" (click)="sendAgain()">Send again</button>
+          <button mat-raised-button color="primary" (click)="cancel()">Cancel</button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

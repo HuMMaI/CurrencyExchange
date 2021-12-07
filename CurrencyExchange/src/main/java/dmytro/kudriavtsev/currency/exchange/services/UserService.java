@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -37,9 +38,13 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public void createActivationCode(String email) {
-        User user = new User(email);
-        user.setActivationCode(generateRandomCode());
+    public boolean createActivationCode(String email) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+
+        String activationCode = generateRandomCode();
+
+        User user = userOptional.orElseGet(() -> new User(email));
+        user.setActivationCode(activationCode);
 
         User savedUser = userRepository.save(user);
 
@@ -51,6 +56,8 @@ public class UserService {
         messageDTO.setData(userActivationDTO);
 
         producerService.sendMessage(KafkaTopics.ACTIVATION_MAIL, messageDTO);
+
+        return userOptional.isPresent();
     }
 
     private String generateRandomCode() {

@@ -1,0 +1,78 @@
+<div class="wallet-container">
+  <mat-card class="wallet-container__card">
+    <mat-card-header class="wallet-header">
+      <mat-card-title>Wallet</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content class="wallet-content">
+      <div class="wallet-content__currency" [class.wallet-content__not-exist]="!uahWallet">
+        <span>UAH Wallet:</span>
+        <span>{{this.uahWallet ? this.uahWallet.sum : '0'}}₴</span>
+
+        <button mat-raised-button class="create-button" *ngIf="!uahWallet">Create</button>
+      </div>
+
+      <div class="wallet-content__currency" [class.wallet-content__not-exist]="!usdWallet">
+        <span>USD Wallet:</span>
+        <span>{{this.usdWallet ? this.usdWallet.sum : '0'}}$</span>
+
+        <button mat-raised-button class="create-button" *ngIf="!usdWallet">Create</button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div class="exchange-container">
+  <mat-card class="exchange-container__card">
+    <mat-card-header class="exchange-header">
+      <mat-card-title>Currency exchange</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content class="exchange-content">
+      <table mat-table [dataSource]="dataSource" class="exchange-content__rate-table mat-elevation-z8">
+        <ng-container matColumnDef="currency">
+          <th mat-header-cell *matHeaderCellDef> Currency </th>
+          <td mat-cell *matCellDef="let element"> {{element.currency}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="sale">
+          <th mat-header-cell *matHeaderCellDef> Sale </th>
+          <td mat-cell *matCellDef="let element"> {{element.sale}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="purchase">
+          <th mat-header-cell *matHeaderCellDef> Purchase </th>
+          <td mat-cell *matCellDef="let element"> {{element.purchase}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <div class="exchange-content__exchange-form" [formGroup]="exchangeModel">
+        <mat-chip-list class="event-selector" aria-label="Event selection">
+          <mat-chip value="SALE" (click)="eventSelection($event.target)">Sale</mat-chip>
+          <mat-chip value="PURCHASE" (click)="eventSelection($event.target)">Purchase</mat-chip>
+        </mat-chip-list>
+
+        <div class="inputs-container" [class.inputs-container__locked]="!isEventSelected">
+          <mat-form-field class="inputs-container__exchange-input" appearance="fill">
+            <mat-label>{{this.exchangeModel.controls['firstCurrency'].value}}</mat-label>
+            <input matInput placeholder="1000" type="number" formControlName="firstSum" (input)="onChange()" [readonly]="!isEventSelected">
+          </mat-form-field>
+
+          <button mat-icon-button color="primary" (click)="swapCurrency()">
+            <mat-icon>swap_horiz</mat-icon>
+          </button>
+
+          <mat-form-field class="inputs-container__exchange-input" appearance="fill">
+            <mat-label>{{this.exchangeModel.controls['secondCurrency'].value}}</mat-label>
+            <input matInput type="number" placeholder="1000" formControlName="secondSum" readonly>
+          </mat-form-field>
+        </div>
+
+        <button mat-raised-button color="primary" (click)="exchange($event)">Exchange</button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -43,7 +43,7 @@ public class ExchangeService {
 
         double sum;
 
-        if (exchangeDTO.getEvent() == ExchangeEvent.SOLD) {
+        if (exchangeDTO.getEvent() == ExchangeEvent.SALE) {
             if (exchangeDTO.getFirstCurrency() == Currency.USD) {
                 sum = exchangeDTO.getSum() * exchangeRate.getPurchase();
             } else {

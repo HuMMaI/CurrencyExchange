@@ -1,0 +1,100 @@
+.wallet-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+
+  &__card {
+    min-width: 30%;
+
+    .wallet-header {
+      display: flex;
+      justify-content: center;
+    }
+
+    .wallet-content {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+
+      &__currency {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14pt;
+        padding: 10px;
+        position: relative;
+      }
+
+      &__not-exist {
+        span {
+          opacity: 0.5;
+        }
+
+        .create-button {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+
+        border-radius: 10px;
+        background-color: rgb(241, 241, 241);
+      }
+    }
+  }
+}
+
+.exchange-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+
+  &__card {
+    min-width: 50%;
+
+    .exchange-header {
+      display: flex;
+      justify-content: center;
+    }
+
+    .exchange-content {
+      &__rate-table {
+        width: 100%;
+
+        .mat-column-currency {
+          width: 60%;
+        }
+
+        .mat-column-sale, .mat-column-purchase {
+          width: 20%;
+        }
+      }
+
+      &__exchange-form {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .event-selector {
+          margin-bottom: 10px;
+        }
+
+        .inputs-container {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+
+          &__locked {
+            opacity: 0.5;
+            pointer-events: none;
+            background-color: rgb(234, 234, 234);
+          }
+
+          &__exchange-input {
+            width: 45%;
+          }
+        }
+      }
+    }
+  }
+}

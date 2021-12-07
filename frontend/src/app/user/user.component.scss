@@ -1,0 +1,35 @@
+.email-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  &__card {
+    width: 35%;
+
+    .email-from-header {
+      display: flex;
+      justify-content: center;
+    }
+
+    .form-container {
+      display: flex;
+      flex-direction: column;
+
+      &__form-field {
+        width: 100%;
+      }
+
+      &__actions {
+        margin-top: 10px;
+        width: 100%;
+        display: flex;
+        gap: 10px;
+
+        button {
+          flex: 1;
+        }
+      }
+    }
+  }
+}
