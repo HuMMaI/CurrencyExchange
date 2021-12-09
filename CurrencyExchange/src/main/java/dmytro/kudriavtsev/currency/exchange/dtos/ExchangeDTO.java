@@ -1,10 +1,22 @@
 package dmytro.kudriavtsev.currency.exchange.dtos;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 public class ExchangeDTO {
+    @NotNull
     private String email;
+
+    @NotNull
     private ExchangeEvent event;
+
+    @NotNull
     private Currency firstCurrency;
+
+    @NotNull
     private Currency secondCurrency;
+
+    @Min(0)
     private double sum;
 
     public ExchangeDTO() {

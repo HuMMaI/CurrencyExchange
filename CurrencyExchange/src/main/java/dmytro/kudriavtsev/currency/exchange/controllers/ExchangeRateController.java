@@ -1,5 +1,6 @@
 package dmytro.kudriavtsev.currency.exchange.controllers;
 
+import dmytro.kudriavtsev.currency.exchange.dtos.ExchangeRateDTO;
 import dmytro.kudriavtsev.currency.exchange.entities.ExchangeRate;
 import dmytro.kudriavtsev.currency.exchange.services.ExchangeRateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class ExchangeRateController {
     }
 
     @PostMapping
-    public ResponseEntity<ExchangeRate> createExchangeRate(@RequestBody ExchangeRate exchangeRate) {
-        return new ResponseEntity<>(exchangeRateService.create(exchangeRate), HttpStatus.OK);
+    public ResponseEntity<ExchangeRateDTO> createExchangeRate(@RequestBody ExchangeRateDTO exchangeRateDTO) {
+        return new ResponseEntity<>(exchangeRateService.create(exchangeRateDTO), HttpStatus.OK);
     }
 }

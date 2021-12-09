@@ -1,5 +1,6 @@
 package dmytro.kudriavtsev.currency.exchange.services;
 
+import dmytro.kudriavtsev.currency.exchange.dtos.ExchangeRateDTO;
 import dmytro.kudriavtsev.currency.exchange.entities.ExchangeRate;
 import dmytro.kudriavtsev.currency.exchange.repos.ExchangeRateRepository;
 import org.springframework.http.HttpStatus;
@@ -25,10 +26,11 @@ public class ExchangeRateService {
         return exchangeRateRepository.getById(id);
     }
 
-    public ExchangeRate create(ExchangeRate exchangeRate) {
+    public ExchangeRateDTO create(ExchangeRateDTO exchangeRateDTO) {
+        ExchangeRate exchangeRate = new ExchangeRate(exchangeRateDTO);
         exchangeRate.setPostTime(ZonedDateTime.now());
 
-        return exchangeRateRepository.save(exchangeRate);
+        return new ExchangeRateDTO(exchangeRateRepository.save(exchangeRate));
     }
 
     public ExchangeRate update(ExchangeRate exchangeRate) {

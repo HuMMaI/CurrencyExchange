@@ -1,5 +1,7 @@
 package dmytro.kudriavtsev.currency.exchange.entities;
 
+import dmytro.kudriavtsev.currency.exchange.dtos.ExchangeRateDTO;
+
 import javax.persistence.*;
 import java.time.ZonedDateTime;
 
@@ -22,11 +24,10 @@ public class ExchangeRate {
     public ExchangeRate() {
     }
 
-    public ExchangeRate(String currency, Double sale, Double purchase, ZonedDateTime postTime) {
-        this.currency = currency;
-        this.sale = sale;
-        this.purchase = purchase;
-        this.postTime = postTime;
+    public ExchangeRate(ExchangeRateDTO exchangeRateDTO) {
+        this.currency = exchangeRateDTO.getCurrency().toString();
+        this.sale = exchangeRateDTO.getSale();
+        this.purchase = exchangeRateDTO.getPurchase();
     }
 
     public Long getId() {

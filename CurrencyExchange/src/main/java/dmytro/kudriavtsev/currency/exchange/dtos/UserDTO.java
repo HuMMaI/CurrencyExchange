@@ -2,9 +2,16 @@ package dmytro.kudriavtsev.currency.exchange.dtos;
 
 import dmytro.kudriavtsev.currency.exchange.entities.User;
 
+import javax.validation.constraints.NotNull;
+
 public class UserDTO {
+    @NotNull
     private String email;
+
+    @NotNull
     private String name;
+
+    @NotNull
     private String surname;
 
     public UserDTO() {
