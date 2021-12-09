@@ -27,9 +27,7 @@ public class ExchangeRateController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createExchangeRate(@RequestBody ExchangeRate exchangeRate) {
-        exchangeRateService.create(exchangeRate);
-
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<ExchangeRate> createExchangeRate(@RequestBody ExchangeRate exchangeRate) {
+        return new ResponseEntity<>(exchangeRateService.create(exchangeRate), HttpStatus.OK);
     }
 }

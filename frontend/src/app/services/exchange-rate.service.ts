@@ -16,4 +16,8 @@ export class ExchangeRateService {
   public getCurrentExchangeRate(): Observable<ExchangeRate[]> {
     return this.http.get<ExchangeRate[]>(`${this.url}/api/rate/actual`);
   }
+
+  public createExchangeRate(exchangeRate: ExchangeRate): Observable<ExchangeRate> {
+    return this.http.post<ExchangeRate>(`${this.url}/api/rate`, exchangeRate);
+  }
 }

@@ -1,0 +1,14 @@
+.line-chart-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+
+  &__card {
+    min-width: 60%;
+
+    .chart-header {
+      display: flex;
+      justify-content: center;
+    }
+  }
+}

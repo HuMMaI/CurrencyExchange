@@ -7,14 +7,21 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {WalletModule} from "./wallet/wallet.module";
 import {CommonModule} from "@angular/common";
 import {HttpClientModule} from "@angular/common/http";
-import {RouterModule} from "@angular/router";
 import {UserModule} from "./user/user.module";
+import {NgChartsModule} from "ng2-charts";
+import { ExchangeRateDialogComponent } from './wallet/exchange-rate-dialog/exchange-rate-dialog.component';
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
+import {MatButtonModule} from "@angular/material/button";
+import {ReactiveFormsModule} from "@angular/forms";
 
 const pagesModules = [WalletModule, UserModule];
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ExchangeRateDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -22,7 +29,13 @@ const pagesModules = [WalletModule, UserModule];
     BrowserAnimationsModule,
     CommonModule,
     HttpClientModule,
-    ...pagesModules
+    NgChartsModule,
+    ...pagesModules,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent],

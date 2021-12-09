@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>Create new exchange rate</h1>
+<div mat-dialog-content class="dialog-container">
+  <div class="dialog-container__dialog-content" [formGroup]="exchangeRateForm">
+    <label>USD</label>
+    <mat-form-field appearance="fill">
+      <mat-label>Sale</mat-label>
+      <input matInput placeholder="27.12" formControlName="sale">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Purchase</mat-label>
+      <input matInput placeholder="27.3" formControlName="purchase">
+    </mat-form-field>
+  </div>
+</div>
+<div mat-dialog-actions class="create-button">
+  <button mat-raised-button (click)="create()">Create</button>
+</div>

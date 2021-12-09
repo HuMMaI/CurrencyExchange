@@ -29,7 +29,9 @@
     </mat-card-header>
 
     <mat-card-content class="exchange-content">
-      <table mat-table [dataSource]="dataSource" class="exchange-content__rate-table mat-elevation-z8">
+      <button mat-raised-button class="exchange-content__create-button" *ngIf="!isExchangeRateExist" (click)="openExchangeRateDialog()">Create exchange rate</button>
+
+      <table mat-table [dataSource]="dataSource" class="exchange-content__rate-table mat-elevation-z8" [class.exchange-content__locked]="!isExchangeRateExist">
         <ng-container matColumnDef="currency">
           <th mat-header-cell *matHeaderCellDef> Currency </th>
           <td mat-cell *matCellDef="let element"> {{element.currency}} </td>
@@ -49,7 +51,7 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
 
-      <div class="exchange-content__exchange-form" [formGroup]="exchangeModel">
+      <div class="exchange-content__exchange-form" [formGroup]="exchangeModel" [class.exchange-content__locked]="!isExchangeRateExist">
         <mat-chip-list class="event-selector" aria-label="Event selection">
           <mat-chip value="SALE" (click)="eventSelection($event.target)">Sale</mat-chip>
           <mat-chip value="PURCHASE" (click)="eventSelection($event.target)">Purchase</mat-chip>
@@ -73,6 +75,96 @@
 
         <button mat-raised-button color="primary" (click)="exchange($event)">Exchange</button>
       </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<app-pie-chart chartName="Success report chart" [labels]="countReportLabels" [data]="countReportData"></app-pie-chart>
+
+<app-pie-chart chartName="Exchange event report chart" [labels]="exchangeEventReportLabels" [data]="exchangeEventReportData"></app-pie-chart>
+
+
+<div class="report-container">
+  <mat-card class="report-container__card">
+    <mat-card-header class="report-header">
+      <mat-card-title>Success currency report</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content class="report-content">
+      <table mat-table [dataSource]="successReportDataSource" class="report-content__report-table mat-elevation-z8">
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef> Email </th>
+          <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="event">
+          <th mat-header-cell *matHeaderCellDef> Exchange event </th>
+          <td mat-cell *matCellDef="let element"> {{element.event}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="firstSum">
+          <th mat-header-cell *matHeaderCellDef> First sum </th>
+          <td mat-cell *matCellDef="let element"> {{element.firstSum}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="firstCurrency">
+          <th mat-header-cell *matHeaderCellDef> First currency </th>
+          <td mat-cell *matCellDef="let element"> {{element.firstCurrency}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="secondSum">
+          <th mat-header-cell *matHeaderCellDef> Second sum </th>
+          <td mat-cell *matCellDef="let element"> {{element.secondSum}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="secondCurrency">
+          <th mat-header-cell *matHeaderCellDef> Second currency </th>
+          <td mat-cell *matCellDef="let element"> {{element.secondCurrency}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="successReportColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: successReportColumns;"></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div class="report-container">
+  <mat-card class="report-container__card">
+    <mat-card-header class="report-header">
+      <mat-card-title>Success currency report</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content class="report-content">
+      <table mat-table [dataSource]="failedReportDataSource" class="report-content__report-table mat-elevation-z8">
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef> Email </th>
+          <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="event">
+          <th mat-header-cell *matHeaderCellDef> Exchange event </th>
+          <td mat-cell *matCellDef="let element"> {{element.event}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="firstSum">
+          <th mat-header-cell *matHeaderCellDef> First sum </th>
+          <td mat-cell *matCellDef="let element"> {{element.firstSum}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="firstCurrency">
+          <th mat-header-cell *matHeaderCellDef> First currency </th>
+          <td mat-cell *matCellDef="let element"> {{element.firstCurrency}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="secondCurrency">
+          <th mat-header-cell *matHeaderCellDef> Second currency </th>
+          <td mat-cell *matCellDef="let element"> {{element.secondCurrency}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="failedReportColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: failedReportColumns;"></tr>
+      </table>
     </mat-card-content>
   </mat-card>
 </div>

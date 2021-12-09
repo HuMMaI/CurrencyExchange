@@ -1,13 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import {ExchangeRate} from "../models/exchange-rate";
-import {WalletService} from "../services/wallet.service";
-import {Wallet} from "../models/wallet";
-import {ExchangeRateService} from "../services/exchange-rate.service";
-import {Exchange} from "../models/exchange";
-import {ExchangeService} from "../services/exchange.service";
-import {FormBuilder, Validators} from "@angular/forms";
-import {User} from "../models/user";
-import {UserService} from "../services/user.service";
+import { ExchangeRate } from '../models/exchange-rate';
+import { WalletService } from '../services/wallet.service';
+import { Wallet } from '../models/wallet';
+import { ExchangeRateService } from '../services/exchange-rate.service';
+import { Exchange } from '../models/exchange';
+import { ExchangeService } from '../services/exchange.service';
+import { FormBuilder, Validators } from '@angular/forms';
+import { User } from '../models/user';
+import { UserService } from '../services/user.service';
+import { CountReport } from '../models/count-report';
+import { ReportService } from '../services/report.service';
+import { ExchangeEventReport } from '../models/exchange-event-report';
+import { MatDialog } from '@angular/material/dialog';
+import { ExchangeRateDialogComponent } from './exchange-rate-dialog/exchange-rate-dialog.component';
 
 @Component({
   selector: 'app-wallet',
@@ -21,17 +26,46 @@ export class WalletComponent implements OnInit {
   public exchangeRate: ExchangeRate[];
   public user?: User;
   public isEventSelected = false;
+  public isExchangeRateExist = true;
 
-  displayedColumns: string[] = ['currency', 'sale', 'purchase'];
+  public displayedColumns: string[] = ['currency', 'sale', 'purchase'];
   public dataSource: ExchangeRate[];
+
+  public successReportColumns: string[] = ['email', 'event', 'firstSum', 'firstCurrency', 'secondSum', 'secondCurrency'];
+  public successReportDataSource: Exchange[];
+  public failedReportColumns: string[] = ['email', 'event', 'firstSum', 'firstCurrency', 'secondCurrency'];
+  public failedReportDataSource: Exchange[];
+
+  public countReportLabels: string[] = [];
+  public exchangeEventReportLabels: string[] = [];
+  public countReportData: number[] = [];
+  public exchangeEventReportData: number[] = [];
 
   constructor(private walletService: WalletService,
               private exchangeRateService: ExchangeRateService,
               private exchangeService: ExchangeService,
               private formBuilder: FormBuilder,
-              private userService: UserService) {
+              private userService: UserService,
+              private reportService: ReportService,
+              private dialog: MatDialog) {
     this.dataSource = [];
     this.exchangeRate = [];
+    this.successReportDataSource = [];
+    this.failedReportDataSource = [];
+
+    this.reportService.getCountReport().subscribe(
+      (response: CountReport) => {
+        this.countReportLabels = ['Successful', 'Failed'];
+        this.countReportData = [response.successful, response.failed];
+      }
+    );
+
+    this.reportService.getExchangeEventReport().subscribe(
+      (response: ExchangeEventReport) => {
+        this.exchangeEventReportLabels = ['Sold', 'Purchase'];
+        this.exchangeEventReportData = [response.sold, response.purchase];
+      }
+    );
   }
 
   public exchangeModel = this.formBuilder.group({
@@ -65,8 +99,24 @@ export class WalletComponent implements OnInit {
       (response: ExchangeRate[]) => {
         this.exchangeRate = response;
         this.dataSource = response;
+
+        if (!response.length) {
+          this.isExchangeRateExist = false;
+        }
       }
-    )
+    );
+
+    this.reportService.getCurrencyReport(true).subscribe(
+      (response: Exchange[]) => {
+        this.successReportDataSource = response;
+      }
+    );
+
+    this.reportService.getCurrencyReport(false).subscribe(
+      (response: Exchange[]) => {
+        this.failedReportDataSource = response;
+      }
+    );
   }
 
   public fetchWallets(): void {
@@ -87,7 +137,7 @@ export class WalletComponent implements OnInit {
 
   public onChange(): void {
     let sum: number;
-    if (this.exchangeEvent === 'sale') {
+    if (this.exchangeEvent === 'SALE') {
       if (this.firstCurrency === 'USD') {
         sum = this.firstSum * this.exchangeRate[0].purchase;
       } else {
@@ -169,5 +219,19 @@ export class WalletComponent implements OnInit {
       'secondCurrency': this.exchangeModel.controls['secondCurrency'].value,
       'sum': this.exchangeModel.controls['firstSum'].value
     };
+  }
+
+  public openExchangeRateDialog(): void {
+    const dialogRef = this.dialog.open(ExchangeRateDialogComponent, {
+      width: '550px'
+    });
+
+    dialogRef.afterClosed().subscribe(
+      (result: ExchangeRate[]) => {
+        this.exchangeRate = result;
+        this.dataSource = result;
+        this.isExchangeRateExist = true;
+      }
+    )
   }
 }

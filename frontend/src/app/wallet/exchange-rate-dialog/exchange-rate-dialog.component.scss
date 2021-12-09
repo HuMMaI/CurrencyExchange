@@ -1,0 +1,13 @@
+.dialog-container {
+  &__dialog-content {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+}
+
+.create-button {
+  display: flex;
+  justify-content: center;
+}
