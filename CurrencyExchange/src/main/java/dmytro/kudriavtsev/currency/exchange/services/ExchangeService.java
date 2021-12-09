@@ -50,7 +50,7 @@ public class ExchangeService {
                 sum = exchangeDTO.getSum() / exchangeRate.getPurchase();
             }
 
-            if (sum > firstCurrencyWallet.getSum()) {
+            if (exchangeDTO.getSum() > firstCurrencyWallet.getSum()) {
                 throw new ExchangeException(HttpStatus.BAD_REQUEST,
                         String.format("User %s hasn't got enough money for this operation. You need %.2f %s",
                                 user.getEmail(), exchangeDTO.getSum(), exchangeDTO.getFirstCurrency().toString()), exchangeDTO);
@@ -70,7 +70,7 @@ public class ExchangeService {
             if (sum > secondCurrencyWallet.getSum()) {
                 throw new ExchangeException(HttpStatus.BAD_REQUEST,
                         String.format("User %s hasn't got enough money for this operation. You need %.2f %s",
-                                user.getEmail(), exchangeDTO.getSum(), exchangeDTO.getSecondCurrency().toString()), exchangeDTO);
+                                user.getEmail(), sum, exchangeDTO.getSecondCurrency().toString()), exchangeDTO);
             }
 
             double firstSum = Math.round((firstCurrencyWallet.getSum() + exchangeDTO.getSum()) * 100.0) / 100.0;

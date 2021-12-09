@@ -1,3 +1,8 @@
+<div class="bonus-buttons">
+  <button mat-raised-button color="primary" (click)="bonus(true)">Bonus +</button>
+  <button mat-raised-button color="primary" (click)="bonus(false)">Bonus -</button>
+</div>
+
 <div class="wallet-container">
   <mat-card class="wallet-container__card">
     <mat-card-header class="wallet-header">
@@ -9,14 +14,14 @@
         <span>UAH Wallet:</span>
         <span>{{this.uahWallet ? this.uahWallet.sum : '0'}}₴</span>
 
-        <button mat-raised-button class="create-button" *ngIf="!uahWallet">Create</button>
+        <button mat-raised-button class="create-button" *ngIf="!uahWallet" (click)="createWallet('UAH')">Create</button>
       </div>
 
       <div class="wallet-content__currency" [class.wallet-content__not-exist]="!usdWallet">
         <span>USD Wallet:</span>
         <span>{{this.usdWallet ? this.usdWallet.sum : '0'}}$</span>
 
-        <button mat-raised-button class="create-button" *ngIf="!usdWallet">Create</button>
+        <button mat-raised-button class="create-button" *ngIf="!usdWallet" (click)="createWallet('USD')">Create</button>
       </div>
     </mat-card-content>
   </mat-card>
@@ -132,7 +137,7 @@
 <div class="report-container">
   <mat-card class="report-container__card">
     <mat-card-header class="report-header">
-      <mat-card-title>Success currency report</mat-card-title>
+      <mat-card-title>Failed currency report</mat-card-title>
     </mat-card-header>
 
     <mat-card-content class="report-content">

@@ -13,6 +13,7 @@ import { ReportService } from '../services/report.service';
 import { ExchangeEventReport } from '../models/exchange-event-report';
 import { MatDialog } from '@angular/material/dialog';
 import { ExchangeRateDialogComponent } from './exchange-rate-dialog/exchange-rate-dialog.component';
+import {CreateWallet} from "../models/create-wallet";
 
 @Component({
   selector: 'app-wallet',
@@ -72,14 +73,14 @@ export class ExchangeComponent implements OnInit {
           this.user = user;
           sessionStorage.removeItem('email');
           sessionStorage.setItem('user', JSON.stringify(user));
+          this.fetchWallets();
         }
       )
     } else {
       this.user = JSON.parse(<string>sessionStorage.getItem('user'));
       this.exchangeModel.controls['email'].setValue(this.user?.email);
+      this.fetchWallets();
     }
-
-    this.fetchWallets();
 
     this.exchangeRateService.getCurrentExchangeRate().subscribe(
       (response: ExchangeRate[]) => {
@@ -242,5 +243,34 @@ export class ExchangeComponent implements OnInit {
         this.isExchangeRateExist = true;
       }
     )
+  }
+
+  public createWallet(currency: string): void {
+    const wallet = {
+      'email': this.user?.email,
+      'currency': currency
+    } as CreateWallet;
+
+    this.walletService.createWallet(wallet).subscribe(
+      () => {
+        this.fetchWallets();
+      },
+      error => {
+        alert(error.error.message);
+      }
+    );
+  }
+
+  public bonus(increase: boolean): void {
+    if (this.user?.email) {
+      this.walletService.bonus(this.user.email, increase).subscribe(
+        () => {
+          this.fetchWallets();
+        },
+        error => {
+          alert(error.error.message);
+        }
+      );
+    }
   }
 }

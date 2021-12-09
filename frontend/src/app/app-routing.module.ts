@@ -4,7 +4,7 @@ import {EmailValidate} from "./services/email-validate";
 
 const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'user'},
-  {path: 'wallet', loadChildren: () => import('./wallet/exchange.module').then(m => m.ExchangeModule), canActivate: [EmailValidate]},
+  {path: 'wallet', loadChildren: () => import('./exchange/exchange.module').then(m => m.ExchangeModule), canActivate: [EmailValidate]},
   {path: 'user', loadChildren: () => import('./user/user.module').then(m => m.UserModule)}
 ];
 
