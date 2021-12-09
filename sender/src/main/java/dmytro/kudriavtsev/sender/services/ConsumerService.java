@@ -26,15 +26,15 @@ public class ConsumerService {
     @KafkaListener(topics = "mail", groupId = "group_id")
     public void consumeMail(@Payload String message) throws JsonProcessingException {
         JsonNode jsonNode = new ObjectMapper().readTree(message);
-        MessageDTO<ExchangeDTO> messageDTO = new ObjectMapper().convertValue(jsonNode.findValue("data"), new TypeReference<>() {});
+        MessageDTO<ExchangeDTO> messageDTO = new ObjectMapper().convertValue(jsonNode, new TypeReference<>() {});
         ExchangeDTO exchangeDTO = messageDTO.getData();
 
         sendMail(exchangeDTO.getEmail(), "Exchange information",
                 String.format("Your exchanged was successful!\nYou exchange %.2f %s to %.2f %s.",
-                        exchangeDTO.getSold(),
-                        exchangeDTO.getSoldCurrency(),
-                        exchangeDTO.getBought(),
-                        exchangeDTO.getBoughtCurrency()));
+                        exchangeDTO.getFirstSum(),
+                        exchangeDTO.getFirstCurrency(),
+                        exchangeDTO.getSecondSum(),
+                        exchangeDTO.getSecondCurrency()));
     }
 
     @KafkaListener(topics = "activation", groupId = "group_id")

@@ -16,10 +16,10 @@ import { ExchangeRateDialogComponent } from './exchange-rate-dialog/exchange-rat
 
 @Component({
   selector: 'app-wallet',
-  templateUrl: './wallet.component.html',
-  styleUrls: ['./wallet.component.scss']
+  templateUrl: './exchange.component.html',
+  styleUrls: ['./exchange.component.scss']
 })
-export class WalletComponent implements OnInit {
+export class ExchangeComponent implements OnInit {
   public exist = true;
   public uahWallet?: Wallet;
   public usdWallet?: Wallet;
@@ -52,20 +52,6 @@ export class WalletComponent implements OnInit {
     this.exchangeRate = [];
     this.successReportDataSource = [];
     this.failedReportDataSource = [];
-
-    this.reportService.getCountReport().subscribe(
-      (response: CountReport) => {
-        this.countReportLabels = ['Successful', 'Failed'];
-        this.countReportData = [response.successful, response.failed];
-      }
-    );
-
-    this.reportService.getExchangeEventReport().subscribe(
-      (response: ExchangeEventReport) => {
-        this.exchangeEventReportLabels = ['Sold', 'Purchase'];
-        this.exchangeEventReportData = [response.sold, response.purchase];
-      }
-    );
   }
 
   public exchangeModel = this.formBuilder.group({
@@ -103,6 +89,24 @@ export class WalletComponent implements OnInit {
         if (!response.length) {
           this.isExchangeRateExist = false;
         }
+      }
+    );
+
+    this.reportsInit();
+  }
+
+  public reportsInit(): void {
+    this.reportService.getCountReport().subscribe(
+      (response: CountReport) => {
+        this.countReportLabels = ['Successful', 'Failed'];
+        this.countReportData = [response.successful, response.failed];
+      }
+    );
+
+    this.reportService.getExchangeEventReport().subscribe(
+      (response: ExchangeEventReport) => {
+        this.exchangeEventReportLabels = ['Sold', 'Purchase'];
+        this.exchangeEventReportData = [response.sold, response.purchase];
       }
     );
 
@@ -163,6 +167,11 @@ export class WalletComponent implements OnInit {
         this.exchangeModel.controls['firstSum'].reset();
         this.exchangeModel.controls['secondSum'].reset();
         this.fetchWallets();
+      },
+      error => {
+        alert(error.error.message);
+        this.exchangeModel.controls['firstSum'].reset();
+        this.exchangeModel.controls['secondSum'].reset();
       }
     );
   }

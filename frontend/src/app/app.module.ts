@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {WalletModule} from "./wallet/wallet.module";
+import {ExchangeModule} from "./wallet/exchange.module";
 import {CommonModule} from "@angular/common";
 import {HttpClientModule} from "@angular/common/http";
 import {UserModule} from "./user/user.module";
@@ -16,7 +16,7 @@ import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
 import {ReactiveFormsModule} from "@angular/forms";
 
-const pagesModules = [WalletModule, UserModule];
+const pagesModules = [ExchangeModule, UserModule];
 
 @NgModule({
   declarations: [

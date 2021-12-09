@@ -1,8 +1,8 @@
-import {AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild} from '@angular/core';
-import {ChartConfiguration, ChartData, ChartType} from "chart.js";
-import DataLabelsPlugin from "chartjs-plugin-datalabels";
-import {ReportService} from "../../services/report.service";
-import {BaseChartDirective} from "ng2-charts";
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
+import DataLabelsPlugin from 'chartjs-plugin-datalabels';
+import { ReportService } from '../../services/report.service';
+import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
   selector: 'app-pie-chart',
