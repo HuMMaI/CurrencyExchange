@@ -18,7 +18,6 @@ public class User {
 
     private String email;
 
-    @Column(name = "activation_code")
     private String activationCode;
 
     @OneToMany

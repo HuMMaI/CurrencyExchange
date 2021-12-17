@@ -24,20 +24,6 @@ public class UserService {
         this.producerService = producerService;
     }
 
-    public List<User> readAll() {
-        return userRepository.findAll();
-    }
-
-    public User readById(Long id) {
-        return userRepository.getById(id);
-    }
-
-    public User create(UserDTO userDTO) {
-        User user = new User(userDTO);
-
-        return userRepository.save(user);
-    }
-
     public boolean createActivationCode(String email) {
         Optional<User> userOptional = userRepository.findByEmail(email);
 

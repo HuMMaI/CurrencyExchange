@@ -2,13 +2,10 @@ package dmytro.kudriavtsev.currency.exchange.controllers;
 
 import dmytro.kudriavtsev.currency.exchange.dtos.UserActivationDTO;
 import dmytro.kudriavtsev.currency.exchange.dtos.UserDTO;
-import dmytro.kudriavtsev.currency.exchange.entities.User;
 import dmytro.kudriavtsev.currency.exchange.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -20,32 +17,16 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<User>> getAll() {
-        List<User> users = userService.readAll();
-
-        return new ResponseEntity<>(users, HttpStatus.OK);
-    }
-
     @GetMapping("/{email}")
-    public ResponseEntity<UserDTO> getByEmail(@PathVariable("email") String email) {
-        UserDTO userDTO = new UserDTO(userService.readByEmail(email));
-
-        return new ResponseEntity<>(userDTO, HttpStatus.OK);
-    }
-
-    @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody UserDTO userDTO) {
-        User newUser = userService.create(userDTO);
-
-        return new ResponseEntity<>(newUser, HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public UserDTO getByEmail(@PathVariable("email") String email) {
+        return new UserDTO(userService.readByEmail(email));
     }
 
     @PostMapping("/activate/{email}")
-    public ResponseEntity<Boolean> sendActivationMail(@PathVariable String email) {
-        boolean isUserPresent = userService.createActivationCode(email);
-
-        return new ResponseEntity<>(isUserPresent, HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public Boolean sendActivationMail(@PathVariable String email) {
+        return userService.createActivationCode(email);
     }
 
     @PostMapping("/validate")
@@ -60,16 +41,14 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO) {
-        UserDTO updatedUser = userService.update(userDTO);
-
-        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public UserDTO updateUser(@RequestBody UserDTO userDTO) {
+        return userService.update(userDTO);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteUser(@PathVariable("id") Long id) {
         userService.delete(id);
-
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

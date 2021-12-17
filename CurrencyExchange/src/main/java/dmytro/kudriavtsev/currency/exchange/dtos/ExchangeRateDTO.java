@@ -21,7 +21,7 @@ public class ExchangeRateDTO {
     }
 
     public ExchangeRateDTO(ExchangeRate exchangeRate) {
-        this.currency = Currency.valueOf(exchangeRate.getCurrency());
+        this.currency = exchangeRate.getCurrency();
         this.sale = exchangeRate.getSale();
         this.purchase = exchangeRate.getPurchase();
     }

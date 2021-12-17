@@ -23,14 +23,6 @@ public class WalletService {
         this.userRepository = userRepository;
     }
 
-    public List<Wallet> readAll() {
-        return walletRepository.findAll();
-    }
-
-    public Wallet readById(Long id) {
-        return walletRepository.getById(id);
-    }
-
     public Wallet create(CreateWalletDTO createWalletDTO) {
         User user = userRepository.findByEmail(createWalletDTO.getEmail())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
@@ -66,10 +58,6 @@ public class WalletService {
         }
 
         walletRepository.saveAll(wallets);
-    }
-
-    public void delete(Long id) {
-        walletRepository.deleteById(id);
     }
 
     public void updateAll(List<Wallet> wallets) {

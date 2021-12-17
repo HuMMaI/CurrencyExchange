@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.ZonedDateTime;
-import java.util.List;
 
 @Service
 public class ExchangeRateService {
@@ -18,14 +17,6 @@ public class ExchangeRateService {
         this.exchangeRateRepository = exchangeRateRepository;
     }
 
-    public List<ExchangeRate> readAll() {
-        return exchangeRateRepository.findAll();
-    }
-
-    public ExchangeRate readById(Long id) {
-        return exchangeRateRepository.getById(id);
-    }
-
     public ExchangeRateDTO create(ExchangeRateDTO exchangeRateDTO) {
         ExchangeRate exchangeRate = new ExchangeRate(exchangeRateDTO);
         exchangeRate.setPostTime(ZonedDateTime.now());
@@ -33,22 +24,15 @@ public class ExchangeRateService {
         return new ExchangeRateDTO(exchangeRateRepository.save(exchangeRate));
     }
 
-    public ExchangeRate update(ExchangeRate exchangeRate) {
-        return exchangeRateRepository.save(exchangeRate);
-    }
-
-    public void delete(Long id) {
-        exchangeRateRepository.deleteById(id);
-    }
-
-    public List<ExchangeRate> findActualExchangeRates() {
+    public ExchangeRateDTO findActualExchangeRates() {
         ZonedDateTime now = ZonedDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
-        return this.exchangeRateRepository.findAllByPostTimeAfter(now);
+        return new ExchangeRateDTO(exchangeRateRepository.findAllByPostTimeAfter(now));
     }
 
     public ExchangeRate findActualExchangeRate(String currency) {
         ZonedDateTime now = ZonedDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
         return this.exchangeRateRepository.findExchangeRateByCurrencyAndPostTimeAfter(currency, now)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Actual exchange rate does not found: %s", currency)));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        String.format("Actual exchange rate does not found: %s", currency)));
     }
 }

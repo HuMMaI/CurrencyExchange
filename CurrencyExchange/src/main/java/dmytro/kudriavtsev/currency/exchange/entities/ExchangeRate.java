@@ -1,5 +1,6 @@
 package dmytro.kudriavtsev.currency.exchange.entities;
 
+import dmytro.kudriavtsev.currency.exchange.dtos.Currency;
 import dmytro.kudriavtsev.currency.exchange.dtos.ExchangeRateDTO;
 
 import javax.persistence.*;
@@ -12,20 +13,19 @@ public class ExchangeRate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String currency;
+    private Currency currency;
 
     private Double sale;
 
     private Double purchase;
 
-    @Column(name = "post_time")
     private ZonedDateTime postTime;
 
     public ExchangeRate() {
     }
 
     public ExchangeRate(ExchangeRateDTO exchangeRateDTO) {
-        this.currency = exchangeRateDTO.getCurrency().toString();
+        this.currency = exchangeRateDTO.getCurrency();
         this.sale = exchangeRateDTO.getSale();
         this.purchase = exchangeRateDTO.getPurchase();
     }
@@ -38,11 +38,11 @@ public class ExchangeRate {
         this.id = id;
     }
 
-    public String getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
+    public void setCurrency(Currency currency) {
         this.currency = currency;
     }
 
