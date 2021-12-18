@@ -65,7 +65,7 @@ public class WalletService {
     }
 
     public List<WalletDTO> readByUser(String email) {
-        List<Wallet> wallets = walletRepository.findAllByEmail(email);
+        List<Wallet> wallets = walletRepository.findAllByUserEmail(email);
 
         return wallets.stream()
                 .map(WalletDTO::new)
