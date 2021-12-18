@@ -1,9 +1,10 @@
 package dmytro.kudriavtsev.currency.exchange.dtos;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class CreateWalletDTO {
-    @NotNull
+    @NotBlank
     private String email;
 
     @NotNull

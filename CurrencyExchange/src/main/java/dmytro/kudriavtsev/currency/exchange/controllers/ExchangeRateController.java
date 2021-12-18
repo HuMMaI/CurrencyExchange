@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/rate")
@@ -22,7 +24,7 @@ public class ExchangeRateController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public ExchangeRateDTO createExchangeRate(@RequestBody ExchangeRateDTO exchangeRateDTO) {
+    public ExchangeRateDTO createExchangeRate(@RequestBody @Valid ExchangeRateDTO exchangeRateDTO) {
         return exchangeRateService.create(exchangeRateDTO);
     }
 }

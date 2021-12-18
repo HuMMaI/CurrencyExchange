@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/exchange")
@@ -20,7 +22,7 @@ public class ExchangeController {
     private ExchangeService exchangeService;
 
     @PostMapping
-    public ResponseEntity<Void> exchange(@RequestBody ExchangeDTO exchangeDTO) {
+    public ResponseEntity<Void> exchange(@RequestBody @Valid ExchangeDTO exchangeDTO) {
         User user = userService.readByEmail(exchangeDTO.getEmail());
 
         exchangeService.exchange(user, exchangeDTO);

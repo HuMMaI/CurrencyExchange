@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/user")
@@ -30,7 +32,7 @@ public class UserController {
     }
 
     @PostMapping("/validate")
-    public ResponseEntity<Void> validateEmail(@RequestBody UserActivationDTO userActivationDTO) {
+    public ResponseEntity<Void> validateEmail(@RequestBody @Valid UserActivationDTO userActivationDTO) {
         boolean isActivate = userService.activateUser(userActivationDTO);
 
         if (isActivate) {
@@ -42,7 +44,7 @@ public class UserController {
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public UserDTO updateUser(@RequestBody UserDTO userDTO) {
+    public UserDTO updateUser(@RequestBody @Valid UserDTO userDTO) {
         return userService.update(userDTO);
     }
 

@@ -6,7 +6,9 @@ import dmytro.kudriavtsev.currency.exchange.exceptions.ExchangeException;
 import dmytro.kudriavtsev.currency.exchange.kafka.KafkaTopics;
 import dmytro.kudriavtsev.currency.exchange.services.ProducerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -43,6 +45,18 @@ public class UserExceptionHandler {
         producerService.sendMessage(KafkaTopics.REPORTS, kafkaExchangeDTO);
 
         return new ResponseEntity<>(errorResponseDTO, exchangeException.getStatus());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponseDTO> handleValidationException(MethodArgumentNotValidException methodArgumentNotValidException, ServletWebRequest servletWebRequest) {
+        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO(
+                "Validation error",
+                HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                methodArgumentNotValidException.getMessage(),
+                servletWebRequest.getRequest().getRequestURI()
+        );
+
+        return new ResponseEntity<>(errorResponseDTO, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
 }

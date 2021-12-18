@@ -1,12 +1,12 @@
 package dmytro.kudriavtsev.currency.exchange.dtos;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 public class UserActivationDTO {
-    @NotNull
+    @NotBlank
     private String email;
 
-    @NotNull
+    @NotBlank
     private String activationCode;
 
     public UserActivationDTO() {

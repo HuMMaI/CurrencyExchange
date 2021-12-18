@@ -1,10 +1,11 @@
 package dmytro.kudriavtsev.currency.exchange.dtos;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class ExchangeDTO {
-    @NotNull
+    @NotBlank
     private String email;
 
     @NotNull
@@ -16,13 +17,14 @@ public class ExchangeDTO {
     @NotNull
     private Currency secondCurrency;
 
+    @NotNull
     @Min(0)
-    private double sum;
+    private Double sum;
 
     public ExchangeDTO() {
     }
 
-    public ExchangeDTO(String email, ExchangeEvent event, Currency firstCurrency, Currency secondCurrency, double sum) {
+    public ExchangeDTO(String email, ExchangeEvent event, Currency firstCurrency, Currency secondCurrency, Double sum) {
         this.email = email;
         this.event = event;
         this.firstCurrency = firstCurrency;
@@ -62,11 +64,11 @@ public class ExchangeDTO {
         this.secondCurrency = secondCurrency;
     }
 
-    public double getSum() {
+    public Double getSum() {
         return sum;
     }
 
-    public void setSum(double sum) {
+    public void setSum(Double sum) {
         this.sum = sum;
     }
 }
