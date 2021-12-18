@@ -1,5 +1,6 @@
 package dmytro.kudriavtsev.currency.exchange.controllers;
 
+import dmytro.kudriavtsev.currency.exchange.dtos.Currency;
 import dmytro.kudriavtsev.currency.exchange.dtos.ExchangeRateDTO;
 import dmytro.kudriavtsev.currency.exchange.services.ExchangeRateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ public class ExchangeRateController {
     @GetMapping("/actual")
     @ResponseStatus(HttpStatus.OK)
     public ExchangeRateDTO getActualExchangeRates() {
-        return exchangeRateService.findActualExchangeRates();
+        return exchangeRateService.findActualExchangeRate(Currency.USD);
     }
 
     @PostMapping

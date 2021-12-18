@@ -2,8 +2,8 @@ package dmytro.kudriavtsev.currency.exchange.services;
 
 import dmytro.kudriavtsev.currency.exchange.dtos.Currency;
 import dmytro.kudriavtsev.currency.exchange.dtos.ExchangeDTO;
+import dmytro.kudriavtsev.currency.exchange.dtos.ExchangeRateDTO;
 import dmytro.kudriavtsev.currency.exchange.dtos.KafkaExchangeDTO;
-import dmytro.kudriavtsev.currency.exchange.entities.ExchangeRate;
 import dmytro.kudriavtsev.currency.exchange.entities.User;
 import dmytro.kudriavtsev.currency.exchange.entities.Wallet;
 import dmytro.kudriavtsev.currency.exchange.exceptions.ExchangeException;
@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +29,7 @@ public class ExchangeService {
     private ExchangeRateService exchangeRateService;
 
     public void exchange(User user, ExchangeDTO exchangeDTO) {
-        ExchangeRate exchangeRate = exchangeRateService.findActualExchangeRate(Currency.USD.toString());
+        ExchangeRateDTO exchangeRate = exchangeRateService.findActualExchangeRate(Currency.USD);
 
         if (user.getWallet().isEmpty()) {
             throw new ExchangeException(HttpStatus.BAD_REQUEST,
@@ -45,9 +46,9 @@ public class ExchangeService {
                         String.format("User %s hasn't got wallet for this currency: %s",
                                 user.getEmail(), exchangeDTO.getSecondCurrency().toString()), exchangeDTO));
 
-        double sum;
-        double firstWalletSum;
-        double secondWalletSum;
+        BigDecimal sum;
+        BigDecimal firstWalletSum;
+        BigDecimal secondWalletSum;
 
         switch(exchangeDTO.getEvent()) {
             case SALE:
@@ -59,34 +60,34 @@ public class ExchangeService {
                                     user.getEmail(), exchangeDTO.getSum(), exchangeDTO.getFirstCurrency().toString()), exchangeDTO);
                 }
 
-                firstWalletSum = Math.round((firstCurrencyWallet.getSum() - exchangeDTO.getSum()) * 100.0) / 100.0;
-                secondWalletSum = Math.round((secondCurrencyWallet.getSum() + sum) * 100.0) / 100.0;
+                firstWalletSum = BigDecimal.valueOf(firstCurrencyWallet.getSum()).subtract(BigDecimal.valueOf(exchangeDTO.getSum()));
+                secondWalletSum = BigDecimal.valueOf(secondCurrencyWallet.getSum()).add(sum);
                 break;
 
             case PURCHASE:
                 sum = sumCalculator(exchangeDTO.getFirstCurrency(), exchangeRate.getSale(), exchangeDTO.getSum());
 
-                if (sum > secondCurrencyWallet.getSum()) {
+                if (sum.doubleValue() > secondCurrencyWallet.getSum()) {
                     throw new ExchangeException(HttpStatus.BAD_REQUEST,
                             String.format("User %s hasn't got enough money for this operation. You need %.2f %s",
                                     user.getEmail(), sum, exchangeDTO.getSecondCurrency().toString()), exchangeDTO);
                 }
 
-                firstWalletSum = Math.round((firstCurrencyWallet.getSum() + exchangeDTO.getSum()) * 100.0) / 100.0;
-                secondWalletSum = Math.round((secondCurrencyWallet.getSum() - sum) * 100.0) / 100.0;
+                firstWalletSum = BigDecimal.valueOf(firstCurrencyWallet.getSum()).add(BigDecimal.valueOf(exchangeDTO.getSum()));
+                secondWalletSum = BigDecimal.valueOf(secondCurrencyWallet.getSum()).subtract(sum);
                 break;
 
             default:
                 throw new ExchangeException(HttpStatus.BAD_REQUEST, "Wrong exchange event!", exchangeDTO);
         }
 
-        firstCurrencyWallet.setSum(firstWalletSum);
-        secondCurrencyWallet.setSum(secondWalletSum);
+        firstCurrencyWallet.setSum(firstWalletSum.doubleValue());
+        secondCurrencyWallet.setSum(secondWalletSum.doubleValue());
 
         List<Wallet> wallets = Arrays.asList(firstCurrencyWallet, secondCurrencyWallet);
         walletService.updateAll(wallets);
 
-        KafkaExchangeDTO kafkaExchangeDTO = new KafkaExchangeDTO(exchangeDTO, sum, true);
+        KafkaExchangeDTO kafkaExchangeDTO = new KafkaExchangeDTO(exchangeDTO, sum.doubleValue(), true);
         producerService.sendMessage(KafkaTopics.REPORTS, kafkaExchangeDTO);
         producerService.sendMessage(KafkaTopics.MAIL, kafkaExchangeDTO);
     }
@@ -97,13 +98,16 @@ public class ExchangeService {
                 .findFirst();
     }
 
-    private double sumCalculator(Currency exchangeCurrency, double exchangeRate, double exchangeSum) {
-        double sum;
+    private BigDecimal sumCalculator(Currency exchangeCurrency, double exchangeRate, double exchangeSum) {
+        BigDecimal sum;
+
+        BigDecimal exchangeRateDecimal = new BigDecimal(exchangeRate);
+        BigDecimal exchangeSumDecimal = new BigDecimal(exchangeSum);
 
         if (exchangeCurrency == Currency.USD) {
-            sum = exchangeSum * exchangeRate;
+            sum = exchangeSumDecimal.multiply(exchangeRateDecimal);
         } else {
-            sum = exchangeSum / exchangeRate;
+            sum = exchangeSumDecimal.subtract(exchangeRateDecimal);
         }
 
         return sum;

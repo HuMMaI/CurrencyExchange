@@ -1,5 +1,6 @@
 package dmytro.kudriavtsev.currency.exchange.services;
 
+import dmytro.kudriavtsev.currency.exchange.dtos.Currency;
 import dmytro.kudriavtsev.currency.exchange.dtos.ExchangeRateDTO;
 import dmytro.kudriavtsev.currency.exchange.entities.ExchangeRate;
 import dmytro.kudriavtsev.currency.exchange.repos.ExchangeRateRepository;
@@ -24,15 +25,12 @@ public class ExchangeRateService {
         return new ExchangeRateDTO(exchangeRateRepository.save(exchangeRate));
     }
 
-    public ExchangeRateDTO findActualExchangeRates() {
+    public ExchangeRateDTO findActualExchangeRate(Currency currency) {
         ZonedDateTime now = ZonedDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
-        return new ExchangeRateDTO(exchangeRateRepository.findAllByPostTimeAfter(now));
-    }
-
-    public ExchangeRate findActualExchangeRate(String currency) {
-        ZonedDateTime now = ZonedDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
-        return this.exchangeRateRepository.findExchangeRateByCurrencyAndPostTimeAfter(currency, now)
+        ExchangeRate exchangeRate = exchangeRateRepository.findExchangeRateByCurrencyAndPostTimeAfter(currency, now)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("Actual exchange rate does not found: %s", currency)));
+
+        return new ExchangeRateDTO(exchangeRate);
     }
 }

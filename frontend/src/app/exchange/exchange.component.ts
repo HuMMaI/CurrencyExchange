@@ -86,10 +86,9 @@ export class ExchangeComponent implements OnInit {
       (response: ExchangeRate[]) => {
         this.exchangeRate = response;
         this.dataSource = response;
-
-        if (!response.length) {
-          this.isExchangeRateExist = false;
-        }
+      },
+      error => {
+        this.isExchangeRateExist = false;
       }
     );
 
