@@ -20,12 +20,7 @@ public class User {
 
     private String activationCode;
 
-    @OneToMany
-    @JoinTable(name = "user_wallets", joinColumns = {
-            @JoinColumn(name = "user_id", referencedColumnName = "id")
-    }, inverseJoinColumns = {
-            @JoinColumn(name = "wallet_id", referencedColumnName = "id")
-    })
+    @OneToMany(mappedBy = "user")
     private List<Wallet> wallet;
 
     public User() {

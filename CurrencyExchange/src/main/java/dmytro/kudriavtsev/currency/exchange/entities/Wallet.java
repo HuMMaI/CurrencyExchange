@@ -14,6 +14,7 @@ public class Wallet {
     private Double sum;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     public Wallet() {
