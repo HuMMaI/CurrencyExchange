@@ -8,6 +8,8 @@ import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.core.CountRequest;
+import org.elasticsearch.client.core.CountResponse;
 import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
@@ -18,7 +20,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ElasticService {
@@ -29,34 +30,34 @@ public class ElasticService {
     public List<ExchangeDTO> getAll() throws IOException {
         MatchAllQueryBuilder matchAllQueryBuilder = QueryBuilders.matchAllQuery();
 
-        return executeQuery(matchAllQueryBuilder);
+        return executeSearchQuery(matchAllQueryBuilder);
     }
 
     public List<ExchangeDTO> getExchangesReport(boolean success) throws IOException {
         MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("success", String.valueOf(success));
 
-        return executeQuery(matchQueryBuilder);
+        return executeSearchQuery(matchQueryBuilder);
     }
 
     public CountReportDTO getCountReport() throws IOException {
         MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("success", String.valueOf(true));
-        List<ExchangeDTO> successful = executeQuery(matchQueryBuilder);
+        Long successful = executeCountQuery(matchQueryBuilder);
         matchQueryBuilder = QueryBuilders.matchQuery("success", String.valueOf(false));
-        List<ExchangeDTO> failed = executeQuery(matchQueryBuilder);
+        Long failed = executeCountQuery(matchQueryBuilder);
 
-        return new CountReportDTO(successful.size(), failed.size());
+        return new CountReportDTO(successful, failed);
     }
 
     public ExchangeEventReportDTO getReportByExchangeEvent() throws IOException {
         MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("event", "SOLD");
-        List<ExchangeDTO> sold = executeQuery(matchQueryBuilder);
+        Long sold = executeCountQuery(matchQueryBuilder);
         matchQueryBuilder = QueryBuilders.matchQuery("event", "PURCHASE");
-        List<ExchangeDTO> purchase = executeQuery(matchQueryBuilder);
+        Long purchase = executeCountQuery(matchQueryBuilder);
 
-        return new ExchangeEventReportDTO(sold.size(), purchase.size());
+        return new ExchangeEventReportDTO(sold, purchase);
     }
 
-    private <T extends QueryBuilder> List<ExchangeDTO> executeQuery(T matchQueryBuilder) throws IOException {
+    private <T extends QueryBuilder> List<ExchangeDTO> executeSearchQuery(T matchQueryBuilder) throws IOException {
         SearchRequest searchRequest = new SearchRequest("exchanges");
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
         sourceBuilder.query(matchQueryBuilder);
@@ -78,5 +79,14 @@ public class ElasticService {
         }
 
         return exchanges;
+    }
+
+    private Long executeCountQuery(QueryBuilder queryBuilder) throws IOException {
+        CountRequest countRequest = new CountRequest("exchanges");
+        countRequest.query(queryBuilder);
+
+        CountResponse countResponse = restHighLevelClient.count(countRequest, RequestOptions.DEFAULT);
+
+        return countResponse.getCount();
     }
 }

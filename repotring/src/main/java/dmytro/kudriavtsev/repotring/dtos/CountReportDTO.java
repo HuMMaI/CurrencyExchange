@@ -1,30 +1,30 @@
 package dmytro.kudriavtsev.repotring.dtos;
 
 public class CountReportDTO {
-    private int successful;
-    private int failed;
+    private Long successful;
+    private Long failed;
 
     public CountReportDTO() {
     }
 
-    public CountReportDTO(int successful, int failed) {
+    public CountReportDTO(Long successful, Long failed) {
         this.successful = successful;
         this.failed = failed;
     }
 
-    public int getSuccessful() {
+    public Long getSuccessful() {
         return successful;
     }
 
-    public void setSuccessful(int successful) {
+    public void setSuccessful(Long successful) {
         this.successful = successful;
     }
 
-    public int getFailed() {
+    public Long getFailed() {
         return failed;
     }
 
-    public void setFailed(int failed) {
+    public void setFailed(Long failed) {
         this.failed = failed;
     }
 }
