@@ -38,10 +38,7 @@ public class UserService {
         userActivationDTO.setEmail(savedUser.getEmail());
         userActivationDTO.setActivationCode(savedUser.getActivationCode());
 
-        MessageDTO<UserActivationDTO> messageDTO = new MessageDTO<>();
-        messageDTO.setData(userActivationDTO);
-
-        producerService.sendMessage(KafkaTopics.ACTIVATION_MAIL, messageDTO);
+        producerService.sendMessage(KafkaTopics.ACTIVATION_MAIL, userActivationDTO);
 
         return userOptional.isPresent();
     }

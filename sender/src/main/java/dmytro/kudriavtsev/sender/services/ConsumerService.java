@@ -25,8 +25,7 @@ public class ConsumerService {
 
     @KafkaListener(topics = "mail", groupId = "group_id")
     public void consumeMail(@Payload String message) throws JsonProcessingException {
-        JsonNode jsonNode = new ObjectMapper().readTree(message);
-        MessageDTO<ExchangeDTO> messageDTO = new ObjectMapper().convertValue(jsonNode, new TypeReference<>() {});
+        MessageDTO<ExchangeDTO> messageDTO = new ObjectMapper().readValue(message, new TypeReference<>() {});
         ExchangeDTO exchangeDTO = messageDTO.getData();
 
         sendMail(exchangeDTO.getEmail(), "Exchange information",
@@ -39,8 +38,7 @@ public class ConsumerService {
 
     @KafkaListener(topics = "activation", groupId = "group_id")
     public void consumeActivationMail(@Payload String message) throws JsonProcessingException {
-        JsonNode jsonNode = new ObjectMapper().readTree(message);
-        MessageDTO<ActivationMailDTO> messageDTO = new ObjectMapper().convertValue(jsonNode.findValue("data"), new TypeReference<>() {});
+        MessageDTO<ActivationMailDTO> messageDTO = new ObjectMapper().readValue(message, new TypeReference<>() {});
 
         System.out.println("[Activation code: " + messageDTO.getData().getActivationCode() + "]");
 
