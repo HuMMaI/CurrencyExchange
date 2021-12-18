@@ -49,7 +49,7 @@ public class ElasticService {
     }
 
     public ExchangeEventReportDTO getReportByExchangeEvent() throws IOException {
-        MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("event", "SOLD");
+        MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("event", "SALE");
         Long sold = executeCountQuery(matchQueryBuilder);
         matchQueryBuilder = QueryBuilders.matchQuery("event", "PURCHASE");
         Long purchase = executeCountQuery(matchQueryBuilder);
