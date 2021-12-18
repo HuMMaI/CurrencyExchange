@@ -4,6 +4,7 @@ import {Observable} from "rxjs";
 import {CountReport} from "../models/count-report";
 import {ExchangeEventReport} from "../models/exchange-event-report";
 import {Exchange} from "../models/exchange";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class ReportService {
   private readonly url: string;
 
   constructor(private http: HttpClient) {
-    this.url = 'http://localhost:8081';
+    this.url = environment.reportingServiceHost;
   }
 
   public getCountReport(): Observable<CountReport> {

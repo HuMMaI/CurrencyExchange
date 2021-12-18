@@ -3,6 +3,7 @@ import {Observable} from "rxjs";
 import {User} from "../models/user";
 import {HttpClient} from "@angular/common/http";
 import {UserActivation} from "../models/user-activation";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class UserService {
   private readonly url: string;
 
   constructor(private http: HttpClient) {
-    this.url = 'http://localhost:8080';
+    this.url = environment.currencyExchangeHost;
   }
 
   public updateUser(user: User): Observable<User> {

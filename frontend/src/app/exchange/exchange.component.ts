@@ -82,15 +82,15 @@ export class ExchangeComponent implements OnInit {
       this.fetchWallets();
     }
 
-    this.exchangeRateService.getCurrentExchangeRate().subscribe(
-      (response: ExchangeRate[]) => {
+    this.exchangeRateService.getCurrentExchangeRate().subscribe({
+      next: (response: ExchangeRate[]) => {
         this.exchangeRate = response;
         this.dataSource = response;
       },
-      error => {
+      error: () => {
         this.isExchangeRateExist = false;
       }
-    );
+    });
 
     this.reportsInit();
   }
@@ -162,18 +162,18 @@ export class ExchangeComponent implements OnInit {
   public exchange(event: Event): void {
     const exchangeDTO = this.createExchangeObject();
 
-    this.exchangeService.exchange(exchangeDTO).subscribe(
-      () => {
+    this.exchangeService.exchange(exchangeDTO).subscribe({
+      next: () => {
         this.exchangeModel.controls['firstSum'].reset();
         this.exchangeModel.controls['secondSum'].reset();
         this.fetchWallets();
       },
-      error => {
+      error: error => {
         alert(error.error.message);
         this.exchangeModel.controls['firstSum'].reset();
         this.exchangeModel.controls['secondSum'].reset();
       }
-    );
+    });
   }
 
   public eventSelection(event: any): void {
@@ -250,26 +250,26 @@ export class ExchangeComponent implements OnInit {
       'currency': currency
     } as CreateWallet;
 
-    this.walletService.createWallet(wallet).subscribe(
-      () => {
+    this.walletService.createWallet(wallet).subscribe({
+      next: () => {
         this.fetchWallets();
       },
-      error => {
+      error: error => {
         alert(error.error.message);
       }
-    );
+    });
   }
 
   public bonus(increase: boolean): void {
     if (this.user?.email) {
-      this.walletService.bonus(this.user.email, increase).subscribe(
-        () => {
+      this.walletService.bonus(this.user.email, increase).subscribe({
+        next: () => {
           this.fetchWallets();
         },
-        error => {
+        error: error => {
           alert(error.error.message);
         }
-      );
+      });
     }
   }
 }
