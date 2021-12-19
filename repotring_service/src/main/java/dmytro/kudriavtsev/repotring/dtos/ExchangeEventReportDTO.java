@@ -1,23 +1,23 @@
 package dmytro.kudriavtsev.repotring.dtos;
 
 public class ExchangeEventReportDTO {
-    private Long sold;
+    private Long sale;
     private Long purchase;
 
     public ExchangeEventReportDTO() {
     }
 
-    public ExchangeEventReportDTO(Long sold, Long purchase) {
-        this.sold = sold;
+    public ExchangeEventReportDTO(Long sale, Long purchase) {
+        this.sale = sale;
         this.purchase = purchase;
     }
 
-    public Long getSold() {
-        return sold;
+    public Long getSale() {
+        return sale;
     }
 
-    public void setSold(Long sold) {
-        this.sold = sold;
+    public void setSale(Long sale) {
+        this.sale = sale;
     }
 
     public Long getPurchase() {

@@ -47,10 +47,4 @@ public class UserController {
     public UserDTO updateUser(@RequestBody @Valid UserDTO userDTO) {
         return userService.update(userDTO);
     }
-
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteUser(@PathVariable("id") Long id) {
-        userService.delete(id);
-    }
 }

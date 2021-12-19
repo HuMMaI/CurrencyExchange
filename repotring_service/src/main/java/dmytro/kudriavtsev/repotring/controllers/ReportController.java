@@ -6,7 +6,6 @@ import dmytro.kudriavtsev.repotring.dtos.ExchangeEventReportDTO;
 import dmytro.kudriavtsev.repotring.services.ElasticService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -20,22 +19,26 @@ public class ReportController {
     private ElasticService elasticService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<ExchangeDTO>> getAll() throws IOException {
-        return new ResponseEntity<>(elasticService.getAll(), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public List<ExchangeDTO> getAll() throws IOException {
+        return elasticService.getAll();
     }
 
     @GetMapping
-    public ResponseEntity<List<ExchangeDTO>> getExchangesReport(@RequestParam(name = "success") boolean success) throws IOException {
-        return new ResponseEntity<>(elasticService.getExchangesReport(success), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public List<ExchangeDTO> getExchangesReport(@RequestParam(name = "success") boolean success) throws IOException {
+        return elasticService.getExchangesReport(success);
     }
 
     @GetMapping("/count")
-    public ResponseEntity<CountReportDTO> getCountReport() throws IOException {
-        return new ResponseEntity<>(elasticService.getCountReport(), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public CountReportDTO getCountReport() throws IOException {
+        return elasticService.getCountReport();
     }
 
     @GetMapping("/exchange-event")
-    public ResponseEntity<ExchangeEventReportDTO> getExchangeEventReport() throws IOException {
-        return new ResponseEntity<>(elasticService.getReportByExchangeEvent(), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public ExchangeEventReportDTO getExchangeEventReport() throws IOException {
+        return elasticService.getReportByExchangeEvent();
     }
 }

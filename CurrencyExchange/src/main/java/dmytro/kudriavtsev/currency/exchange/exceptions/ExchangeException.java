@@ -1,7 +1,6 @@
 package dmytro.kudriavtsev.currency.exchange.exceptions;
 
 import dmytro.kudriavtsev.currency.exchange.dtos.ExchangeDTO;
-import dmytro.kudriavtsev.currency.exchange.dtos.KafkaExchangeDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 

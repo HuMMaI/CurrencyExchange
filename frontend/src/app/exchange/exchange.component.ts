@@ -105,8 +105,8 @@ export class ExchangeComponent implements OnInit {
 
     this.reportService.getExchangeEventReport().subscribe(
       (response: ExchangeEventReport) => {
-        this.exchangeEventReportLabels = ['Sold', 'Purchase'];
-        this.exchangeEventReportData = [response.sold, response.purchase];
+        this.exchangeEventReportLabels = ['Sale', 'Purchase'];
+        this.exchangeEventReportData = [response.sale, response.purchase];
       }
     );
 

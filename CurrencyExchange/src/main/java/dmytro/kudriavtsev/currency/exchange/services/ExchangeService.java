@@ -28,7 +28,11 @@ public class ExchangeService {
     @Autowired
     private ExchangeRateService exchangeRateService;
 
-    public void exchange(User user, ExchangeDTO exchangeDTO) {
+    @Autowired
+    private UserService userService;
+
+    public void exchange(ExchangeDTO exchangeDTO) {
+        User user = userService.readByEmail(exchangeDTO.getEmail());
         ExchangeRateDTO exchangeRate = exchangeRateService.findActualExchangeRate(Currency.USD);
 
         if (user.getWallet().isEmpty()) {
@@ -87,7 +91,11 @@ public class ExchangeService {
         List<Wallet> wallets = Arrays.asList(firstCurrencyWallet, secondCurrencyWallet);
         walletService.updateAll(wallets);
 
-        KafkaExchangeDTO kafkaExchangeDTO = new KafkaExchangeDTO(exchangeDTO, sum.doubleValue(), true);
+        sendKafkaMessages(exchangeDTO, sum.doubleValue());
+    }
+
+    private void sendKafkaMessages(ExchangeDTO exchangeDTO, double sum) {
+        KafkaExchangeDTO kafkaExchangeDTO = new KafkaExchangeDTO(exchangeDTO, sum, true);
         producerService.sendMessage(KafkaTopics.REPORTS, kafkaExchangeDTO);
         producerService.sendMessage(KafkaTopics.MAIL, kafkaExchangeDTO);
     }

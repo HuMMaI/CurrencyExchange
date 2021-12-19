@@ -1,4 +1,4 @@
 export interface ExchangeEventReport {
-  sold: number;
+  sale: number;
   purchase: number;
 }

@@ -1,7 +1,6 @@
 package dmytro.kudriavtsev.currency.exchange.services;
 
 import dmytro.kudriavtsev.currency.exchange.dtos.UserActivationDTO;
-import dmytro.kudriavtsev.currency.exchange.dtos.MessageDTO;
 import dmytro.kudriavtsev.currency.exchange.dtos.UserDTO;
 import dmytro.kudriavtsev.currency.exchange.entities.User;
 import dmytro.kudriavtsev.currency.exchange.kafka.KafkaTopics;
@@ -10,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -57,10 +55,6 @@ public class UserService {
         User savedUser = userRepository.save(user);
 
         return new UserDTO(savedUser);
-    }
-
-    public void delete(Long id) {
-        userRepository.deleteById(id);
     }
 
     public User readByEmail(String email) {
