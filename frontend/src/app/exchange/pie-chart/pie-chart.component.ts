@@ -1,7 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import DataLabelsPlugin from 'chartjs-plugin-datalabels';
-import { ReportService } from '../../services/report.service';
 import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
@@ -15,6 +14,8 @@ export class PieChartComponent implements OnInit, OnChanges {
   @Input() public labels?: string[];
   @Input() public data?: number[];
   @Input() public chartName?: string;
+
+  public isReportExists = false;
 
   public pieChartOptions: ChartConfiguration['options'] = {
     responsive: true,
@@ -41,7 +42,7 @@ export class PieChartComponent implements OnInit, OnChanges {
   public pieChartType: ChartType = 'pie';
   public pieChartPlugins = [DataLabelsPlugin];
 
-  constructor(private reportService: ReportService) {
+  constructor() {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -51,6 +52,7 @@ export class PieChartComponent implements OnInit, OnChanges {
 
     if (changes['data']) {
       this.dataInit();
+      this.isReportExists = true;
     }
   }
 

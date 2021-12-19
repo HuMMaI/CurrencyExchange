@@ -13,7 +13,7 @@ import { ReportService } from '../services/report.service';
 import { ExchangeEventReport } from '../models/exchange-event-report';
 import { MatDialog } from '@angular/material/dialog';
 import { ExchangeRateDialogComponent } from './exchange-rate-dialog/exchange-rate-dialog.component';
-import {CreateWallet} from "../models/create-wallet";
+import { CreateWallet } from '../models/create-wallet';
 
 @Component({
   selector: 'app-wallet',
@@ -83,9 +83,9 @@ export class ExchangeComponent implements OnInit {
     }
 
     this.exchangeRateService.getCurrentExchangeRate().subscribe({
-      next: (response: ExchangeRate[]) => {
-        this.exchangeRate = response;
-        this.dataSource = response;
+      next: (response: ExchangeRate) => {
+        this.exchangeRate.push(response);
+        this.dataSource = this.exchangeRate;
       },
       error: () => {
         this.isExchangeRateExist = false;

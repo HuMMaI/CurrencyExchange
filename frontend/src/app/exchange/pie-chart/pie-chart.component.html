@@ -4,7 +4,7 @@
       <mat-card-title>{{chartName}}</mat-card-title>
     </mat-card-header>
 
-    <mat-card-content class="chart-content">
+    <mat-card-content class="chart-content" *ngIf="isReportExists">
       <div class="chart">
         <canvas baseChart
                 [data]="pieChartData"
@@ -13,6 +13,10 @@
                 [plugins]="pieChartPlugins">
         </canvas>
       </div>
+    </mat-card-content>
+
+    <mat-card-content class="chart-content-empty" *ngIf="!isReportExists">
+      <h3>Report is empty. You need to exchange money to receive information.</h3>
     </mat-card-content>
   </mat-card>
 </div>

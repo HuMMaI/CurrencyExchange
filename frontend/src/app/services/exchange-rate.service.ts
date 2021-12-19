@@ -14,8 +14,8 @@ export class ExchangeRateService {
     this.url = environment.currencyExchangeHost;
   }
 
-  public getCurrentExchangeRate(): Observable<ExchangeRate[]> {
-    return this.http.get<ExchangeRate[]>(`${this.url}/api/rate/actual`);
+  public getCurrentExchangeRate(): Observable<ExchangeRate> {
+    return this.http.get<ExchangeRate>(`${this.url}/api/rate/actual`);
   }
 
   public createExchangeRate(exchangeRate: ExchangeRate): Observable<ExchangeRate> {
