@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -115,7 +116,7 @@ public class ExchangeService {
         if (exchangeCurrency == Currency.USD) {
             sum = exchangeSumDecimal.multiply(exchangeRateDecimal);
         } else {
-            sum = exchangeSumDecimal.subtract(exchangeRateDecimal);
+            sum = exchangeSumDecimal.divide(exchangeRateDecimal, 2, RoundingMode.HALF_UP);
         }
 
         return sum;
