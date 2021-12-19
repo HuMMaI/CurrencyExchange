@@ -159,7 +159,7 @@ export class ExchangeComponent implements OnInit {
     this.exchangeModel.controls['secondSum'].setValue(sum);
   }
 
-  public exchange(event: Event): void {
+  public exchange(): void {
     const exchangeDTO = this.createExchangeObject();
 
     this.exchangeService.exchange(exchangeDTO).subscribe({

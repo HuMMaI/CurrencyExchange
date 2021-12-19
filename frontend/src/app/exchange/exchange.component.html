@@ -78,7 +78,7 @@
           </mat-form-field>
         </div>
 
-        <button mat-raised-button color="primary" (click)="exchange($event)">Exchange</button>
+        <button mat-raised-button color="primary" (click)="exchange()" [disabled]="this.exchangeModel.invalid">Exchange</button>
       </div>
     </mat-card-content>
   </mat-card>

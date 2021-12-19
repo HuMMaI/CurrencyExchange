@@ -52,7 +52,6 @@ export class PieChartComponent implements OnInit, OnChanges {
 
     if (changes['data']) {
       this.dataInit();
-      this.isReportExists = true;
     }
   }
 
@@ -62,7 +61,7 @@ export class PieChartComponent implements OnInit, OnChanges {
   }
 
   private labelsInit(): void {
-    if (this.labels) {
+    if (this.labels?.length) {
       for (const label of this.labels) {
         this.pieChartData.labels?.push(label);
       }
@@ -72,11 +71,12 @@ export class PieChartComponent implements OnInit, OnChanges {
   }
 
   private dataInit(): void {
-    if (this.data) {
+    if (this.data?.length) {
       for (const num of this.data) {
         this.pieChartData.datasets[0].data.push(num);
       }
 
+      this.isReportExists = true;
       this.chart?.update();
     }
   }
