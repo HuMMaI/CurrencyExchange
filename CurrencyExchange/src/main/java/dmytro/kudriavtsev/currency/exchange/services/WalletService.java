@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +29,7 @@ public class WalletService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("User with email %s not found", createWalletDTO.getEmail())));
 
-        Wallet wallet = new Wallet(createWalletDTO.getCurrency().toString(), 0.0, user);
+        Wallet wallet = new Wallet(createWalletDTO.getCurrency().toString(), BigDecimal.ZERO, user);
 
         Wallet savedWallet = walletRepository.save(wallet);
 
@@ -46,13 +47,13 @@ public class WalletService {
         List<Wallet> wallets = user.getWallet();
 
         if (increase) {
-            wallets.forEach(s -> s.setSum(s.getSum() + 10000));
+            wallets.forEach(s -> s.setSum(s.getSum().add(BigDecimal.valueOf(10000))));
         } else {
             wallets.forEach(s -> {
-                if (s.getSum() < 10000) {
-                    s.setSum(0.0);
+                if (s.getSum().compareTo(BigDecimal.valueOf(10000)) < 0) {
+                    s.setSum(BigDecimal.ZERO);
                 } else {
-                    s.setSum(s.getSum() - 10000);
+                    s.setSum(s.getSum().subtract(BigDecimal.valueOf(10000)));
                 }
             });
         }

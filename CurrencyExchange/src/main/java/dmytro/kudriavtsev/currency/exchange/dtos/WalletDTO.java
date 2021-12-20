@@ -2,10 +2,12 @@ package dmytro.kudriavtsev.currency.exchange.dtos;
 
 import dmytro.kudriavtsev.currency.exchange.entities.Wallet;
 
+import java.math.BigDecimal;
+
 public class WalletDTO {
     private long id;
     private String currency;
-    private double sum;
+    private BigDecimal sum;
 
     public WalletDTO() {
     }
@@ -32,11 +34,11 @@ public class WalletDTO {
         this.currency = currency;
     }
 
-    public double getSum() {
+    public BigDecimal getSum() {
         return sum;
     }
 
-    public void setSum(double sum) {
+    public void setSum(BigDecimal sum) {
         this.sum = sum;
     }
 }

@@ -1,12 +1,14 @@
 package dmytro.kudriavtsev.currency.exchange.dtos;
 
+import java.math.BigDecimal;
+
 public class KafkaExchangeDTO {
     private String email;
     private ExchangeEvent event;
     private Currency firstCurrency;
-    private double firstSum;
+    private BigDecimal firstSum;
     private Currency secondCurrency;
-    private double secondSum;
+    private BigDecimal secondSum;
     private boolean success;
 
     public KafkaExchangeDTO() {
@@ -21,7 +23,7 @@ public class KafkaExchangeDTO {
         this.success = success;
     }
 
-    public KafkaExchangeDTO(ExchangeDTO exchangeDTO, double secondSum, boolean success) {
+    public KafkaExchangeDTO(ExchangeDTO exchangeDTO, BigDecimal secondSum, boolean success) {
         this.email = exchangeDTO.getEmail();
         this.event = exchangeDTO.getEvent();
         this.firstCurrency = exchangeDTO.getFirstCurrency();
@@ -55,11 +57,11 @@ public class KafkaExchangeDTO {
         this.firstCurrency = firstCurrency;
     }
 
-    public double getFirstSum() {
+    public BigDecimal getFirstSum() {
         return firstSum;
     }
 
-    public void setFirstSum(double firstSum) {
+    public void setFirstSum(BigDecimal firstSum) {
         this.firstSum = firstSum;
     }
 
@@ -71,11 +73,11 @@ public class KafkaExchangeDTO {
         this.secondCurrency = secondCurrency;
     }
 
-    public double getSecondSum() {
+    public BigDecimal getSecondSum() {
         return secondSum;
     }
 
-    public void setSecondSum(double secondSum) {
+    public void setSecondSum(BigDecimal secondSum) {
         this.secondSum = secondSum;
     }
 

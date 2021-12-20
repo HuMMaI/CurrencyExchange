@@ -8,11 +8,13 @@ import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.client.core.CountRequest;
-import org.elasticsearch.client.core.CountResponse;
 import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.Aggregations;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,22 +41,28 @@ public class ElasticService {
         return executeSearchQuery(matchQueryBuilder);
     }
 
-    public CountReportDTO getCountReport() throws IOException {
-        MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("success", String.valueOf(true));
-        Long successful = executeCountQuery(matchQueryBuilder);
-        matchQueryBuilder = QueryBuilders.matchQuery("success", String.valueOf(false));
-        Long failed = executeCountQuery(matchQueryBuilder);
-
-        return new CountReportDTO(successful, failed);
-    }
-
     public ExchangeEventReportDTO getReportByExchangeEvent() throws IOException {
-        MatchQueryBuilder matchQueryBuilder = QueryBuilders.matchQuery("event", "SALE");
-        Long sale = executeCountQuery(matchQueryBuilder);
-        matchQueryBuilder = QueryBuilders.matchQuery("event", "PURCHASE");
-        Long purchase = executeCountQuery(matchQueryBuilder);
+        final String terms = "by_event";
+        final String fieldName = "event.keyword";
+
+        Terms byEvent = executeCountQuery(terms, fieldName);
+
+        long sale = byEvent.getBucketByKey("SALE") == null ? 0 : byEvent.getBucketByKey("SALE").getDocCount();
+        long purchase = byEvent.getBucketByKey("PURCHASE") == null ? 0 : byEvent.getBucketByKey("PURCHASE").getDocCount();
 
         return new ExchangeEventReportDTO(sale, purchase);
+    }
+
+    public CountReportDTO getCountReport() throws IOException {
+        final String terms = "by_success";
+        final String fieldName = "success";
+
+        Terms bySuccess = executeCountQuery(terms, fieldName);
+
+        long success = bySuccess.getBucketByKey("true") == null ? 0 : bySuccess.getBucketByKey("true").getDocCount();
+        long failed = bySuccess.getBucketByKey("false") == null ? 0 : bySuccess.getBucketByKey("false").getDocCount();
+
+        return new CountReportDTO(success, failed);
     }
 
     private <T extends QueryBuilder> List<ExchangeDTO> executeSearchQuery(T matchQueryBuilder) throws IOException {
@@ -81,12 +89,17 @@ public class ElasticService {
         return exchanges;
     }
 
-    private Long executeCountQuery(QueryBuilder queryBuilder) throws IOException {
-        CountRequest countRequest = new CountRequest("exchanges");
-        countRequest.query(queryBuilder);
+    private Terms executeCountQuery(String terms, String fieldName) throws IOException {
+        SearchRequest searchRequest = new SearchRequest("exchanges");
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
-        CountResponse countResponse = restHighLevelClient.count(countRequest, RequestOptions.DEFAULT);
+        TermsAggregationBuilder aggregation = AggregationBuilders.terms(terms).field(fieldName);
 
-        return countResponse.getCount();
+        searchSourceBuilder.aggregation(aggregation);
+        searchRequest.source(searchSourceBuilder);
+        SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+
+        Aggregations aggregations = searchResponse.getAggregations();
+        return aggregations.get(terms);
     }
 }

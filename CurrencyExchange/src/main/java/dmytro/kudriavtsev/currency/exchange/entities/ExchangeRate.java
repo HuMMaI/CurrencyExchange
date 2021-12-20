@@ -4,6 +4,7 @@ import dmytro.kudriavtsev.currency.exchange.dtos.Currency;
 import dmytro.kudriavtsev.currency.exchange.dtos.ExchangeRateDTO;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 
 @Entity
@@ -16,9 +17,9 @@ public class ExchangeRate {
     @Enumerated(EnumType.STRING)
     private Currency currency;
 
-    private Double sale;
+    private BigDecimal sale;
 
-    private Double purchase;
+    private BigDecimal purchase;
 
     private ZonedDateTime postTime;
 
@@ -47,19 +48,19 @@ public class ExchangeRate {
         this.currency = currency;
     }
 
-    public Double getSale() {
+    public BigDecimal getSale() {
         return sale;
     }
 
-    public void setSale(Double sale) {
+    public void setSale(BigDecimal sale) {
         this.sale = sale;
     }
 
-    public Double getPurchase() {
+    public BigDecimal getPurchase() {
         return purchase;
     }
 
-    public void setPurchase(Double purchase) {
+    public void setPurchase(BigDecimal purchase) {
         this.purchase = purchase;
     }
 

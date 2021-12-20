@@ -1,6 +1,7 @@
 package dmytro.kudriavtsev.currency.exchange.entities;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "wallets")
@@ -11,16 +12,15 @@ public class Wallet {
 
     private String currency;
 
-    private Double sum;
+    private BigDecimal sum;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
     private User user;
 
     public Wallet() {
     }
 
-    public Wallet(String currency, Double sum, User user) {
+    public Wallet(String currency, BigDecimal sum, User user) {
         this.currency = currency;
         this.sum = sum;
         this.user = user;
@@ -42,11 +42,11 @@ public class Wallet {
         this.currency = currency;
     }
 
-    public Double getSum() {
+    public BigDecimal getSum() {
         return sum;
     }
 
-    public void setSum(Double sum) {
+    public void setSum(BigDecimal sum) {
         this.sum = sum;
     }
 

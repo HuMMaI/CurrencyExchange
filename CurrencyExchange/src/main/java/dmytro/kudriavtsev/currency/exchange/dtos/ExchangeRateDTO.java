@@ -4,6 +4,7 @@ import dmytro.kudriavtsev.currency.exchange.entities.ExchangeRate;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 public class ExchangeRateDTO {
     @NotNull
@@ -11,11 +12,11 @@ public class ExchangeRateDTO {
 
     @NotNull
     @Min(0)
-    private Double sale;
+    private BigDecimal sale;
 
     @NotNull
     @Min(0)
-    private Double purchase;
+    private BigDecimal purchase;
 
     public ExchangeRateDTO() {
     }
@@ -34,19 +35,19 @@ public class ExchangeRateDTO {
         this.currency = currency;
     }
 
-    public Double getSale() {
+    public BigDecimal getSale() {
         return sale;
     }
 
-    public void setSale(Double sale) {
+    public void setSale(BigDecimal sale) {
         this.sale = sale;
     }
 
-    public Double getPurchase() {
+    public BigDecimal getPurchase() {
         return purchase;
     }
 
-    public void setPurchase(Double purchase) {
+    public void setPurchase(BigDecimal purchase) {
         this.purchase = purchase;
     }
 }

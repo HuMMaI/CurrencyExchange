@@ -17,13 +17,12 @@ public class ExchangeRateController {
     private ExchangeRateService exchangeRateService;
 
     @GetMapping("/actual")
-    @ResponseStatus(HttpStatus.OK)
     public ExchangeRateDTO getActualExchangeRates() {
         return exchangeRateService.findActualExchangeRate(Currency.USD);
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public ExchangeRateDTO createExchangeRate(@RequestBody @Valid ExchangeRateDTO exchangeRateDTO) {
         return exchangeRateService.create(exchangeRateDTO);
     }

@@ -18,19 +18,17 @@ public class WalletController {
     private WalletService walletService;
 
     @GetMapping("/{email}")
-    @ResponseStatus(HttpStatus.OK)
     public List<WalletDTO> getWallets(@PathVariable String email) {
         return walletService.readByUser(email);
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public void createWallet(@RequestBody @Valid CreateWalletDTO createWalletDTO) {
         walletService.create(createWalletDTO);
     }
 
     @PutMapping("/{email}")
-    @ResponseStatus(HttpStatus.OK)
     public void updateWallets(@RequestParam("increase") boolean increase, @PathVariable("email") String email) {
         walletService.update(email, increase);
     }

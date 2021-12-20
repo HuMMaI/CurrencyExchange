@@ -5,7 +5,12 @@
         "type": "text"
       },
       "event": {
-        "type": "text"
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
       },
       "firstCurrency": {
         "type": "text"

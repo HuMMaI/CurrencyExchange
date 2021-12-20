@@ -3,6 +3,7 @@ package dmytro.kudriavtsev.currency.exchange.dtos;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 public class ExchangeDTO {
     @NotBlank
@@ -19,12 +20,12 @@ public class ExchangeDTO {
 
     @NotNull
     @Min(0)
-    private Double sum;
+    private BigDecimal sum;
 
     public ExchangeDTO() {
     }
 
-    public ExchangeDTO(String email, ExchangeEvent event, Currency firstCurrency, Currency secondCurrency, Double sum) {
+    public ExchangeDTO(String email, ExchangeEvent event, Currency firstCurrency, Currency secondCurrency, BigDecimal sum) {
         this.email = email;
         this.event = event;
         this.firstCurrency = firstCurrency;
@@ -64,11 +65,11 @@ public class ExchangeDTO {
         this.secondCurrency = secondCurrency;
     }
 
-    public Double getSum() {
+    public BigDecimal getSum() {
         return sum;
     }
 
-    public void setSum(Double sum) {
+    public void setSum(BigDecimal sum) {
         this.sum = sum;
     }
 }

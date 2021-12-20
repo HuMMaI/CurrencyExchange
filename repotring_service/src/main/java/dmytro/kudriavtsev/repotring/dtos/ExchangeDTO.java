@@ -1,12 +1,14 @@
 package dmytro.kudriavtsev.repotring.dtos;
 
+import java.math.BigDecimal;
+
 public class ExchangeDTO {
     private String email;
     private String event;
     private String firstCurrency;
-    private double firstSum;
+    private BigDecimal firstSum;
     private String secondCurrency;
-    private double secondSum;
+    private BigDecimal secondSum;
     private boolean success;
 
     public String getEmail() {
@@ -33,11 +35,11 @@ public class ExchangeDTO {
         this.firstCurrency = firstCurrency;
     }
 
-    public double getFirstSum() {
+    public BigDecimal getFirstSum() {
         return firstSum;
     }
 
-    public void setFirstSum(double firstSum) {
+    public void setFirstSum(BigDecimal firstSum) {
         this.firstSum = firstSum;
     }
 
@@ -49,11 +51,11 @@ public class ExchangeDTO {
         this.secondCurrency = secondCurrency;
     }
 
-    public double getSecondSum() {
+    public BigDecimal getSecondSum() {
         return secondSum;
     }
 
-    public void setSecondSum(double secondSum) {
+    public void setSecondSum(BigDecimal secondSum) {
         this.secondSum = secondSum;
     }
 

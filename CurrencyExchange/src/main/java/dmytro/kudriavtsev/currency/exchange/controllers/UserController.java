@@ -20,13 +20,11 @@ public class UserController {
     }
 
     @GetMapping("/{email}")
-    @ResponseStatus(HttpStatus.OK)
     public UserDTO getByEmail(@PathVariable("email") String email) {
         return new UserDTO(userService.readByEmail(email));
     }
 
     @PostMapping("/activate/{email}")
-    @ResponseStatus(HttpStatus.OK)
     public Boolean sendActivationMail(@PathVariable String email) {
         return userService.createActivationCode(email);
     }
@@ -43,7 +41,6 @@ public class UserController {
     }
 
     @PutMapping
-    @ResponseStatus(HttpStatus.OK)
     public UserDTO updateUser(@RequestBody @Valid UserDTO userDTO) {
         return userService.update(userDTO);
     }
