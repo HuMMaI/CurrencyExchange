@@ -16,7 +16,7 @@
 	<properties>
 		<java.version>11</java.version>
 		<sonar.organization>hummai</sonar.organization>
-		<sonar.projectKey>HuMMaI_CurrencyExchange</sonar.projectKey>
+		<sonar.projectKey>Dmytro.Kudriavtsev_HuMMaI_CurrencyExchange</sonar.projectKey>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 	<dependencies>
